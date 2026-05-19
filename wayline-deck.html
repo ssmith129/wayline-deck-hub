@@ -820,34 +820,22 @@
   <section class="slide" data-slide="9">
     <div class="slide-inner">
       <h2 class="display-m">I shipped this. Then I audited myself.</h2>
+      <div class="body-l" style="margin-top: 14px;">
+        Score: <span style="font-family: var(--serif); font-weight: 600; color: var(--ink); font-size: 28px;">68 / 100</span>. Dated, public, in the repo.
+      </div>
       <div class="spacer"></div>
-      <div class="row" style="margin-bottom: 4%; align-items: center; gap: 7%;">
-        <div style="display: flex; flex-direction: column; flex: 1.05; padding-right: 24px;">
-          <div class="body-l" style="margin: 0 0 28px 0;">
-            Score: <span style="font-family: var(--serif); font-weight: 600; color: var(--ink); font-size: 32px; letter-spacing: -0.01em;">68 / 100</span>. Dated, public, in the repo.
-          </div>
-          <div class="label-overline" style="margin-bottom: 18px;">What I found</div>
-          <ul class="body-m" style="margin: 0; padding: 0; list-style: none; line-height: 1.6;">
-            <li style="position: relative; padding-left: 22px; margin-bottom: 12px;">
-              <span style="position: absolute; left: 4px; top: 14px; width: 5px; height: 5px; border-radius: 50%; background: var(--ink-soft);"></span>
-              40% of feature components bypass the design token system.
-            </li>
-            <li style="position: relative; padding-left: 22px; margin-bottom: 12px;">
-              <span style="position: absolute; left: 4px; top: 14px; width: 5px; height: 5px; border-radius: 50%; background: var(--ink-soft);"></span>
-              Duplicate <span style="font-family: var(--mono); font-size: 0.92em; color: var(--ink);">Button</span> components — one core, one "enhanced."
-            </li>
-            <li style="position: relative; padding-left: 22px; margin-bottom: 12px;">
-              <span style="position: absolute; left: 4px; top: 14px; width: 5px; height: 5px; border-radius: 50%; background: var(--ink-soft);"></span>
-              Two toast systems running simultaneously.
-            </li>
-            <li style="position: relative; padding-left: 22px;">
-              <span style="position: absolute; left: 4px; top: 14px; width: 5px; height: 5px; border-radius: 50%; background: var(--ink-soft);"></span>
-              Hardcoded color values in nine files instead of one token.
-            </li>
+      <div class="row" style="margin-bottom: 4%; align-items: stretch; min-height: 380px;">
+        <div class="stack-tight" style="display: flex; flex-direction: column;">
+          <div class="label-overline">What I found</div>
+          <ul class="body-m" style="margin: 12px 0 0; padding-left: 22px; line-height: 1.7;">
+            <li>40% of feature components bypass the design token system.</li>
+            <li>Duplicate <span style="font-family: var(--mono); font-size: 0.92em;">Button</span> components — one core, one "enhanced."</li>
+            <li>Two toast systems running simultaneously.</li>
+            <li>Hardcoded color values in nine files instead of one token.</li>
           </ul>
         </div>
-        <div class="asset-frame" style="flex: 0 0 auto; width: 44%; aspect-ratio: 2239 / 3214; max-height: 78vh;">
-          <img src="./assets/computis-design-critique.png" alt="Design critique markdown file in the repo — audit score 68 of 100" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+        <div class="asset-frame" style="flex: 1.1;">
+          <img src="./assets/computis-design-critique.png" alt="Design critique markdown file in the repo" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
           <div class="placeholder">
             <div class="ph-label">Asset placeholder</div>
             <div class="ph-file">computis-design-critique.png</div>
