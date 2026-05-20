@@ -1127,23 +1127,31 @@
        ===================================================================== -->
   <section class="slide slide--asset-led" data-slide="18">
     <div class="slide-inner">
-      <h2 class="display-m">Voice is an input modality, not an output format.</h2>
+      <h2 class="display-m">Input isn&rsquo;t typed. It&rsquo;s inferred.</h2>
       <div class="body-m" style="margin-top: 8px; max-width: 70%; color: var(--ink-muted);">
-        Constrained voice puts the burden of structure on the system.
+        The clinician&rsquo;s job is to confirm what the system already extracted.
       </div>
       <div class="spacer"></div>
       <div class="asset-frame" style="height: 72%; margin-bottom: 4%;">
-        <video
-          src="./assets/symplify-voice-documentation.mp4"
-          autoplay muted loop playsinline preload="auto"
-          poster="./assets/symplify-voice-documentation.png"
-          onloadeddata="this.nextElementSibling.classList.add('is-loaded')"
-          onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')">
-        </video>
+        <img
+          src="./assets/symplify-patient-acuity.png"
+          alt="Symplify patient acuity dashboard with four acuity bands, patient rows, and trend sparklines"
+          onload="this.nextElementSibling.classList.add('is-loaded')"
+          onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
         <div class="placeholder">
-          <div class="ph-label">Asset placeholder · motion</div>
-          <div class="ph-file">symplify-voice-documentation.mp4</div>
-          <div class="ph-source">Source: Symplify-1.7.4/src/feature-module/components/ai/ — VoiceRecorder + TranscriptionEditor + MedicalTermsHighlighter. <strong>Capture the highlighter activating in real-time:</strong> voice is spoken → transcript fills → high-risk terms ("chest pain," "shortness of breath," "penicillin") get highlighted as they appear. ~10s loop, no audio, rests on the fully-highlighted state for 2 seconds before restart. Static PNG fallback: symplify-voice-documentation.png</div>
+          <div class="ph-label">Asset placeholder</div>
+          <div class="ph-file">symplify-patient-acuity.png</div>
+          <div class="ph-source">
+            Source: Symplify-1.7.4/src/feature-module/components/pages/ai-modules/patient-acuity/patientAcuity.tsx.
+            <strong>Capture requirements:</strong>
+            (a) acuity distribution by unit visible at top;
+            (b) at least 6 patient rows showing all four acuity bands (critical / high / moderate / stable);
+            (c) at least one trend sparkline visible per row;
+            (d) filter chips at top with acuity color dots.
+            Do not desaturate &mdash; ACUITY_COLORS tokens are doing the chromatic work.
+            Patient names / room numbers / diagnoses (Septic Shock, ARDS &mdash; Ventilated, STEMI &mdash; Post PCI)
+            should remain legible in the capture.
+          </div>
         </div>
       </div>
     </div>
