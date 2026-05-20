@@ -722,10 +722,10 @@
         The Computis classification surface — confidence as decision-routing.
       </div>
       <div class="spacer"></div>
-      <div class="row" style="margin-bottom: 4%; align-items: stretch; min-height: 480px;">
+      <div class="row" style="margin-bottom: 4%; align-items: stretch; min-height: 480px; grid-template-columns: 1fr 1.15fr; display: grid; gap: 6%;">
         <div class="stack-tight" style="display: flex; flex-direction: column;">
           <div class="label-overline">Before — raw confidence scores</div>
-          <div class="mock-table" style="margin-top: 12px;">
+          <div class="mock-table" style="margin-top: 12px; font-size: 15px;">
             <div class="row-tab header"><div>TRANSACTION</div><div>CLASSIFICATION</div><div class="num">CONF.</div></div>
             <div class="row-tab"><div>BTC → ETH swap</div><div>Trade</div><div class="num">0.82</div></div>
             <div class="row-tab"><div>USDC inbound</div><div>Income</div><div class="num">0.67</div></div>
@@ -740,7 +740,7 @@
         <div class="stack-tight" style="display: flex; flex-direction: column;">
           <div class="label-overline">After — confidence-banded decisions</div>
           <div class="asset-frame" style="aspect-ratio: 3352 / 2004; width: 100%; margin-top: 12px; background: transparent; box-shadow: none; border: none;">
-            <img src="./assets/computis-classification-insights.png" alt="Computis classification insights panel" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+            <img src="./assets/computis-classification-insights.png" alt="Computis classification insights panel" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
             <div class="placeholder">
               <div class="ph-label">Asset placeholder</div>
               <div class="ph-file">computis-classification-insights.png</div>
@@ -801,7 +801,7 @@
         Anomalies were toast notifications. They were invisible by Tuesday. Now they're a routed triage queue.
       </div>
       <div class="asset-frame" style="aspect-ratio: 8000 / 5000; max-height: 70%; max-width: 100%; margin: 32px auto 0; border: none; background: transparent; box-shadow: none;">
-        <img src="./assets/computis-anomaly-route.png" alt="Computis anomaly detection page" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+        <img src="./assets/computis-anomaly-route.png" alt="Computis anomaly detection page" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
         <div class="placeholder">
           <div class="ph-label">Asset placeholder</div>
           <div class="ph-file">computis-anomaly-route.png</div>
@@ -834,8 +834,8 @@
             <li>Hardcoded color values in nine files instead of one token.</li>
           </ul>
         </div>
-        <div class="asset-frame" style="flex: 0 0 440px; height: 611px; align-self: flex-start;">
-          <img src="./assets/computis-design-critique.png" alt="Design critique markdown file — Computis v2.0.4, audit score 68 of 100, dated March 29 2023" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+        <div class="asset-frame" style="flex: 0 0 540px; height: 740px; align-self: flex-start;">
+          <img src="./assets/computis-design-critique.png" alt="Design critique markdown file — Computis v2.0.4, audit score 68 of 100, dated March 29 2023" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
           <div class="placeholder">
             <div class="ph-label">Asset placeholder</div>
             <div class="ph-file">computis-design-critique.png</div>
@@ -944,11 +944,11 @@
         Computis component library — mine. 49 components on Radix primitives, design system documented alongside the code.
       </div>
       <div class="spacer"></div>
-      <div class="row" style="margin-bottom: 4%; align-items: stretch; min-height: 460px; gap: 4%;">
+      <div class="row" style="margin-bottom: 4%; align-items: stretch; min-height: 640px; gap: 3%;">
         <div class="stack-tight" style="display: flex; flex-direction: column;">
           <div class="label-overline">Figma — source of truth</div>
           <div class="asset-frame" style="flex: 1; margin-top: 10px;">
-            <img src="./assets/figma-classification-insights.png" alt="Figma source for classification-insights" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+            <img src="./assets/figma-classification-insights.png" alt="Figma source for classification-insights" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
             <div class="placeholder">
               <div class="ph-label">Asset placeholder</div>
               <div class="ph-file">figma-classification-insights.png</div>
@@ -959,7 +959,7 @@
         <div class="stack-tight" style="display: flex; flex-direction: column;">
           <div class="label-overline">React — source of record</div>
           <div class="asset-frame" style="flex: 1; margin-top: 10px;">
-            <img src="./assets/code-classification-insights.png" alt="React component code from the repo" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+            <img src="./assets/code-classification-insights.png" alt="React component code from the repo" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
             <div class="placeholder">
               <div class="ph-label">Asset placeholder</div>
               <div class="ph-file">code-classification-insights.png</div>
@@ -983,11 +983,11 @@
         The Computis trust surface — and the Symplify one.
       </div>
       <div class="spacer"></div>
-      <div style="display: grid; grid-template-columns: 1.45fr 0.75fr; gap: 8%; align-items: end; margin-bottom: 6%; min-height: 560px;">
+      <div style="display: grid; grid-template-columns: 1.45fr 0.75fr; gap: 8%; align-items: end; margin-bottom: 6%; min-height: 720px;">
         <div class="stack-tight" style="display: flex; flex-direction: column;">
           <div class="label-overline" style="text-align: center;">Computis &nbsp;·&nbsp; Finance</div>
           <div class="asset-frame" style="aspect-ratio: 3352 / 2004; width: 100%; margin-top: 12px; background: transparent; box-shadow: none; border: none;">
-            <img src="./assets/computis-classification-insights.png" alt="Computis classification insights" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+            <img src="./assets/computis-classification-insights.png" alt="Computis classification insights" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
             <div class="placeholder">
               <div class="ph-label">Asset placeholder</div>
               <div class="ph-file">computis-classification-insights.png</div>
@@ -1002,8 +1002,8 @@
         </div>
         <div class="stack-tight" style="display: flex; flex-direction: column;">
           <div class="label-overline" style="text-align: center;">Symplify &nbsp;·&nbsp; Healthcare</div>
-          <div class="asset-frame" style="aspect-ratio: 1932 / 2890; width: 100%; max-height: 560px; margin: 12px auto 0; background: transparent; box-shadow: none; border: none;">
-            <img src="./assets/symplify-ai-assistant-popup.png" alt="Symplify AI Assistant Popup" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+          <div class="asset-frame" style="aspect-ratio: 1932 / 2890; width: 100%; margin: 12px auto 0; background: transparent; box-shadow: none; border: none;">
+            <img src="./assets/symplify-ai-assistant-popup.png" alt="Symplify AI Assistant Popup" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
             <div class="placeholder">
               <div class="ph-label">Asset placeholder</div>
               <div class="ph-file">symplify-ai-assistant-popup.png</div>
@@ -1070,10 +1070,10 @@
         Confidence belongs on the output, not on the feature page.
       </div>
       <div class="spacer"></div>
-      <div style="display: grid; grid-template-columns: 1fr 2fr 1fr; grid-template-rows: 1fr 1fr; gap: 24px; min-height: 620px; margin-bottom: 4%; align-items: stretch;">
+      <div style="display: grid; grid-template-columns: 1fr 2.2fr 1fr; grid-template-rows: 1fr 1fr; gap: 32px; min-height: 800px; margin-bottom: 4%; align-items: stretch;">
         <!-- Peripheral 1 -->
-        <div class="asset-frame" style="grid-column: 1; grid-row: 1; opacity: 0.85;">
-          <img src="./assets/symplify-triage-badge.png" alt="Triage Priority Badge" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+        <div class="asset-frame" style="grid-column: 1; grid-row: 1; opacity: 0.9;">
+          <img src="./assets/symplify-triage-badge.png" alt="Triage Priority Badge" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
           <div class="placeholder">
             <div class="ph-label">Peripheral</div>
             <div class="ph-file">symplify-triage-badge.png</div>
@@ -1082,7 +1082,7 @@
         </div>
         <!-- Central artifact -->
         <div class="asset-frame" style="grid-column: 2; grid-row: 1 / span 2;">
-          <img src="./assets/symplify-ai-assistant-popup-large.png" alt="AI Assistant Popup with confidence indicator and HIPAA badge" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+          <img src="./assets/symplify-ai-assistant-popup-large.png" alt="AI Assistant Popup with confidence indicator and HIPAA badge" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
           <div class="placeholder">
             <div class="ph-label">Hero asset</div>
             <div class="ph-file">symplify-ai-assistant-popup-large.png</div>
@@ -1090,8 +1090,8 @@
           </div>
         </div>
         <!-- Peripheral 2 -->
-        <div class="asset-frame" style="grid-column: 3; grid-row: 1; opacity: 0.85;">
-          <img src="./assets/symplify-severity-badge.png" alt="Severity Badge" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+        <div class="asset-frame" style="grid-column: 3; grid-row: 1; opacity: 0.9;">
+          <img src="./assets/symplify-severity-badge.png" alt="Severity Badge" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
           <div class="placeholder">
             <div class="ph-label">Peripheral</div>
             <div class="ph-file">symplify-severity-badge.png</div>
@@ -1099,8 +1099,8 @@
           </div>
         </div>
         <!-- Peripheral 3 -->
-        <div class="asset-frame" style="grid-column: 1; grid-row: 2; opacity: 0.85;">
-          <img src="./assets/symplify-urgency-indicator.png" alt="Message Urgency Indicator" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+        <div class="asset-frame" style="grid-column: 1; grid-row: 2; opacity: 0.9;">
+          <img src="./assets/symplify-urgency-indicator.png" alt="Message Urgency Indicator" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
           <div class="placeholder">
             <div class="ph-label">Peripheral</div>
             <div class="ph-file">symplify-urgency-indicator.png</div>
@@ -1108,8 +1108,8 @@
           </div>
         </div>
         <!-- Peripheral 4 -->
-        <div class="asset-frame" style="grid-column: 3; grid-row: 2; opacity: 0.85;">
-          <img src="./assets/symplify-confidence-indicator.png" alt="Confidence Indicator" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+        <div class="asset-frame" style="grid-column: 3; grid-row: 2; opacity: 0.9;">
+          <img src="./assets/symplify-confidence-indicator.png" alt="Confidence Indicator" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
           <div class="placeholder">
             <div class="ph-label">Peripheral</div>
             <div class="ph-file">symplify-confidence-indicator.png</div>
@@ -1166,11 +1166,11 @@
     <div class="slide-inner">
       <h2 class="display-m">Role isn't permissions. It's calibration.</h2>
       <div class="spacer"></div>
-      <div class="row-3" style="margin-bottom: 6%; min-height: 600px; align-items: stretch;">
+      <div class="row-3" style="margin-bottom: 6%; min-height: 760px; align-items: stretch;">
         <div class="stack-tight" style="display: flex; flex-direction: column;">
           <div class="label-overline">Admin</div>
           <div class="asset-frame" style="flex: 1; margin-top: 10px;">
-            <img src="./assets/symplify-sidebar-admin.png" alt="Admin sidebar" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+            <img src="./assets/symplify-sidebar-admin.png" alt="Admin sidebar" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
             <div class="placeholder">
               <div class="ph-label">Asset</div>
               <div class="ph-file">symplify-sidebar-admin.png</div>
@@ -1182,7 +1182,7 @@
         <div class="stack-tight" style="display: flex; flex-direction: column;">
           <div class="label-overline">Doctor</div>
           <div class="asset-frame" style="flex: 1; margin-top: 10px;">
-            <img src="./assets/symplify-sidebar-doctor.png" alt="Doctor sidebar" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+            <img src="./assets/symplify-sidebar-doctor.png" alt="Doctor sidebar" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
             <div class="placeholder">
               <div class="ph-label">Asset</div>
               <div class="ph-file">symplify-sidebar-doctor.png</div>
@@ -1194,7 +1194,7 @@
         <div class="stack-tight" style="display: flex; flex-direction: column;">
           <div class="label-overline">Patient</div>
           <div class="asset-frame" style="flex: 1; margin-top: 10px;">
-            <img src="./assets/symplify-sidebar-patient.png" alt="Patient sidebar" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+            <img src="./assets/symplify-sidebar-patient.png" alt="Patient sidebar" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
             <div class="placeholder">
               <div class="ph-label">Asset</div>
               <div class="ph-file">symplify-sidebar-patient.png</div>
@@ -1238,7 +1238,7 @@
         <div class="stack-tight" style="display: flex; flex-direction: column;">
           <div class="label-overline" style="text-align: center;">Computis &nbsp;·&nbsp; Finance &nbsp;·&nbsp; CPAs</div>
           <div class="asset-frame" style="aspect-ratio: 3352 / 2004; width: 100%; margin-top: 12px; background: transparent; box-shadow: none; border: none;">
-            <img src="./assets/computis-classification-insights.png" alt="Computis classification insights" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+            <img src="./assets/computis-classification-insights.png" alt="Computis classification insights" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
             <div class="placeholder">
               <div class="ph-label">Asset placeholder</div>
               <div class="ph-file">computis-classification-insights.png</div>
@@ -1254,7 +1254,7 @@
         <div class="stack-tight" style="display: flex; flex-direction: column;">
           <div class="label-overline" style="text-align: center;">Symplify &nbsp;·&nbsp; Healthcare &nbsp;·&nbsp; Clinicians</div>
           <div class="asset-frame" style="aspect-ratio: 1932 / 2890; width: 100%; max-height: 560px; margin: 12px auto 0; background: transparent; box-shadow: none; border: none;">
-            <img src="./assets/symplify-ai-assistant-popup.png" alt="Symplify AI Assistant Popup" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+            <img src="./assets/symplify-ai-assistant-popup.png" alt="Symplify AI Assistant Popup" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
             <div class="placeholder">
               <div class="ph-label">Asset placeholder</div>
               <div class="ph-file">symplify-ai-assistant-popup.png</div>
@@ -1278,11 +1278,11 @@
         Trust surfaces translate model output into human decisions.
       </div>
       <div class="spacer"></div>
-      <div class="row-3" style="margin-bottom: 6%; min-height: 480px; align-items: center; gap: 48px;">
+      <div class="row-3" style="margin-bottom: 6%; min-height: 640px; align-items: center; gap: 48px;">
         <div class="stack-tight" style="display: flex; flex-direction: column; align-items: center;">
           <div class="label-overline" style="text-align: center;">Computis &nbsp;·&nbsp; Finance</div>
-          <div class="asset-frame" style="aspect-ratio: 3352 / 2004; width: 100%; max-height: 380px; margin-top: 12px; background: transparent; box-shadow: none; border: none;">
-            <img src="./assets/computis-classification-insights.png" alt="Computis" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+          <div class="asset-frame" style="aspect-ratio: 3352 / 2004; width: 100%; max-height: 520px; margin-top: 12px; background: transparent; box-shadow: none; border: none;">
+            <img src="./assets/computis-classification-insights.png" alt="Computis" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
             <div class="placeholder">
               <div class="ph-file" style="font-size: 12px;">computis-classification-insights.png</div>
               <div style="display: flex; flex-direction: column; gap: 5px; width: 100%; max-width: 210px; margin-top: 4px;">
@@ -1295,8 +1295,8 @@
         </div>
         <div class="stack-tight" style="display: flex; flex-direction: column; align-items: center;">
           <div class="label-overline" style="text-align: center;">Symplify &nbsp;·&nbsp; Healthcare</div>
-          <div class="asset-frame" style="aspect-ratio: 1932 / 2890; max-height: 460px; margin-top: 12px; background: transparent; box-shadow: none; border: none;">
-            <img src="./assets/symplify-ai-assistant-popup.png" alt="Symplify" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+          <div class="asset-frame" style="aspect-ratio: 1932 / 2890; max-height: 620px; margin-top: 12px; background: transparent; box-shadow: none; border: none;">
+            <img src="./assets/symplify-ai-assistant-popup.png" alt="Symplify" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
             <div class="placeholder">
               <div class="ph-file" style="font-size: 12px;">symplify-ai-assistant-popup.png</div>
               <div class="ph-source" style="font-size: 10px;">AIAssistantPopup + ConfidenceIndicator + HIPAABadge</div>
