@@ -1,0 +1,25 @@
+# Netlify configuration for the Wayline deck
+# Static site — no build step. Netlify serves the bundle folder as-is
+# and redeploys automatically on every push to the linked branch.
+
+[build]
+  # No build command: this is a hand-authored static HTML deck.
+  publish = "wayline-deck-bundle"
+
+# Serve the deck at the site root "/" instead of "/wayline-deck.html".
+[[redirects]]
+  from = "/"
+  to = "/wayline-deck.html"
+  status = 200
+
+# Long-cache the immutable-ish assets, but always revalidate the HTML
+# so edits to the deck go live the instant a new deploy finishes.
+[[headers]]
+  for = "/wayline-deck.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
