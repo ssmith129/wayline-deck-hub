@@ -359,6 +359,233 @@
     opacity: 0.7;
   }
 
+  /* =========================================================================
+     LIVE TRUST-SURFACE COMPONENTS — pure HTML/CSS renditions, no PNG assets
+     Reused on slides 14, 21, 22. All internal sizing is in em, so the panel
+     scales with the font-size set on the .trust-card / .assistant-card root.
+     Status colors reuse the confidence-band tokens established above.
+     ========================================================================= */
+
+  /* ---- AI Classification confidence card (Computis / Finance) ---- */
+  .trust-card {
+    font-size: 16px;                 /* scale knob — override per slide */
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 0.75em;
+    box-shadow: var(--panel-shadow);
+    padding: 1.5em 1.75em;
+    font-family: var(--sans);
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25em;
+  }
+  .trust-card .tc-head {
+    display: flex;
+    align-items: center;
+    gap: 0.875em;
+  }
+  .trust-card .tc-icon {
+    flex: 0 0 2.75em;
+    height: 2.75em;
+    border-radius: 0.6em;
+    background: #EAF0FB;
+    color: #3B6FD4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .trust-card .tc-icon svg { width: 1.5em; height: 1.5em; }
+  .trust-card .tc-titles { flex: 1; display: flex; flex-direction: column; gap: 0.15em; }
+  .trust-card .tc-title {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 1.4em;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+  .trust-card .tc-sub { font-size: 0.95em; color: var(--ink-muted); }
+  .trust-card .tc-pill {
+    font-family: var(--mono);
+    font-size: 0.95em;
+    color: var(--ink-soft);
+    border: 1px solid var(--rule);
+    border-radius: 2em;
+    padding: 0.4em 1em;
+  }
+  .trust-card .tc-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1em;
+    border-top: 1px solid var(--rule);
+    padding-top: 1.25em;
+  }
+  .trust-card .tc-row {
+    display: grid;
+    grid-template-columns: 2.25em 7.5em 1fr auto;
+    align-items: center;
+    gap: 1em;
+  }
+  .trust-card .tc-status {
+    width: 2.25em; height: 2.25em;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .trust-card .tc-status svg { width: 1.25em; height: 1.25em; }
+  .trust-card .tc-status.high { background: var(--band-high-bg); color: var(--band-high-fg); }
+  .trust-card .tc-status.med  { background: var(--band-med-bg);  color: var(--band-med-fg); }
+  .trust-card .tc-status.low  { background: var(--band-low-bg);  color: var(--band-low-fg); }
+  .trust-card .tc-label { display: flex; flex-direction: column; gap: 0.1em; }
+  .trust-card .tc-label .name { font-weight: 700; font-size: 1.1em; }
+  .trust-card .tc-label .count { font-size: 0.85em; color: var(--ink-muted); }
+  .trust-card .tc-track {
+    height: 0.6em;
+    background: #EDEBE6;
+    border-radius: 1em;
+    overflow: hidden;
+  }
+  .trust-card .tc-fill {
+    height: 100%;
+    border-radius: 1em;
+    background: #2C6BD8;            /* the blue used in the source product */
+  }
+  .trust-card .tc-pct {
+    font-weight: 700;
+    font-size: 1.15em;
+    text-align: right;
+    min-width: 2.5em;
+  }
+  .trust-card .tc-pct.high { color: var(--band-high-fg); }
+  .trust-card .tc-pct.med  { color: var(--band-med-fg); }
+  .trust-card .tc-pct.low  { color: var(--band-low-fg); }
+  .trust-card .tc-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 1px solid var(--rule);
+    padding-top: 1.1em;
+  }
+  .trust-card .tc-foot .lbl { color: var(--ink-muted); font-size: 1em; }
+  .trust-card .tc-foot .val { font-weight: 700; font-size: 1.15em; }
+
+  /* ---- Symplify AI Assistant popup (Healthcare / Clinicians) ---- */
+  .assistant-card {
+    font-size: 15px;                 /* scale knob — override per slide */
+    width: 100%;
+    border-radius: 0.85em;
+    overflow: hidden;
+    box-shadow: var(--panel-shadow);
+    border: 1px solid var(--rule);
+    background: var(--panel);
+    font-family: var(--sans);
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+  }
+  .assistant-card .ac-head {
+    background: linear-gradient(135deg, #6D40D9 0%, #8B5CF6 100%);
+    color: #fff;
+    padding: 1em 1.15em;
+    display: flex;
+    align-items: center;
+    gap: 0.75em;
+  }
+  .assistant-card .ac-avatar {
+    flex: 0 0 2em; height: 2em;
+    border-radius: 0.5em;
+    background: rgba(255,255,255,0.18);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .assistant-card .ac-avatar svg { width: 1.15em; height: 1.15em; }
+  .assistant-card .ac-head .ac-id { flex: 1; display: flex; flex-direction: column; line-height: 1.2; }
+  .assistant-card .ac-head .ac-name { font-weight: 600; font-size: 1.05em; }
+  .assistant-card .ac-head .ac-status { font-size: 0.8em; opacity: 0.85; }
+  .assistant-card .ac-head .ac-win { display: flex; gap: 0.6em; opacity: 0.9; font-size: 1.1em; }
+  .assistant-card .ac-body {
+    background: #F4F5F7;
+    padding: 1.15em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+  }
+  .assistant-card .ac-msg { display: flex; gap: 0.6em; align-items: flex-start; }
+  .assistant-card .ac-bot {
+    flex: 0 0 1.75em; height: 1.75em;
+    border-radius: 50%;
+    background: #EDE7FB; color: #6D40D9;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .assistant-card .ac-bot svg { width: 0.95em; height: 0.95em; }
+  .assistant-card .ac-bubble {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 0.6em;
+    padding: 0.85em 1em;
+    font-size: 0.95em;
+    line-height: 1.45;
+    color: var(--ink-soft);
+    max-width: 88%;
+  }
+  .assistant-card .ac-bubble .ac-time {
+    display: block;
+    text-align: right;
+    font-size: 0.78em;
+    color: var(--ink-muted);
+    margin-top: 0.5em;
+  }
+  .assistant-card .ac-tabs {
+    display: flex; gap: 0.5em;
+  }
+  .assistant-card .ac-tab {
+    width: 1.9em; height: 1.9em;
+    border-radius: 0.45em;
+    border: 1px solid var(--rule);
+    background: var(--panel);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-muted);
+  }
+  .assistant-card .ac-tab.active { background: #2C6BD8; border-color: #2C6BD8; color: #fff; }
+  .assistant-card .ac-tab svg { width: 0.95em; height: 0.95em; }
+  .assistant-card .ac-chips {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6em;
+  }
+  .assistant-card .ac-chip {
+    border: 1px solid var(--rule);
+    background: var(--panel);
+    border-radius: 2em;
+    padding: 0.55em 0.9em;
+    font-size: 0.85em;
+    color: var(--ink-soft);
+    display: flex; align-items: center; gap: 0.45em;
+    white-space: nowrap;
+  }
+  .assistant-card .ac-chip svg { width: 0.85em; height: 0.85em; flex: 0 0 auto; color: var(--ink-muted); }
+  .assistant-card .ac-input {
+    display: flex; align-items: center; gap: 0.6em;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 0.6em;
+    padding: 0.6em 0.6em 0.6em 1em;
+  }
+  .assistant-card .ac-input .ph { flex: 1; color: var(--ink-muted); font-size: 0.92em; }
+  .assistant-card .ac-send {
+    flex: 0 0 2.1em; height: 2.1em;
+    border-radius: 0.5em;
+    background: #8B7BD8; color: #fff;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .assistant-card .ac-send svg { width: 1em; height: 1em; }
+  .assistant-card .ac-badge {
+    align-self: flex-end;
+    display: flex; align-items: center; gap: 0.35em;
+    font-size: 0.7em; color: #2E5D8A;
+    opacity: 0.8;
+  }
+  .assistant-card .ac-badge svg { width: 1.1em; height: 1.1em; }
+
   /* "Before" mock table — slide 6 left column */
   .mock-table {
     background: var(--panel);
@@ -800,7 +1027,7 @@
       <div class="body-l" style="margin-top: 14px; max-width: 70%;">
         Anomalies were toast notifications. They were invisible by Tuesday. Now they're a routed triage queue.
       </div>
-      <div class="asset-frame" style="aspect-ratio: 8000 / 5000; max-height: 70%; max-width: 100%; margin: 32px auto 0; border: none; background: transparent; box-shadow: none;">
+      <div class="asset-frame" style="aspect-ratio: 8000 / 5000; max-height: 80%; max-width: 100%; margin: 20px auto 0; border: none; background: transparent; box-shadow: none;">
         <img src="./assets/computis-anomaly-route.png" alt="Computis anomaly detection page" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
         <div class="placeholder">
           <div class="ph-label">Asset placeholder</div>
@@ -983,31 +1210,82 @@
         The Computis trust surface — and the Symplify one.
       </div>
       <div class="spacer"></div>
-      <div style="display: grid; grid-template-columns: 1.45fr 0.75fr; gap: 8%; align-items: end; margin-bottom: 6%; min-height: 720px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6%; align-items: center; margin-bottom: 6%; min-height: 720px;">
         <div class="stack-tight" style="display: flex; flex-direction: column;">
           <div class="label-overline" style="text-align: center;">Computis &nbsp;·&nbsp; Finance</div>
-          <div class="asset-frame" style="aspect-ratio: 3352 / 2004; width: 100%; margin-top: 12px; background: transparent; box-shadow: none; border: none;">
-            <img src="./assets/computis-classification-insights.png" alt="Computis classification insights" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
-            <div class="placeholder">
-              <div class="ph-label">Asset placeholder</div>
-              <div class="ph-file">computis-classification-insights.png</div>
-              <div class="ph-source">Same asset as slide 6 — classification-insights panel</div>
-              <div style="display: flex; flex-direction: column; gap: 6px; width: 100%; max-width: 260px; margin-top: 8px;">
-                <div class="conf-tile high"><span class="dot"></span><span class="label-name">High</span><span class="label-count">61</span></div>
-                <div class="conf-tile med"><span class="dot"></span><span class="label-name">Medium</span><span class="label-count">42</span></div>
-                <div class="conf-tile low"><span class="dot"></span><span class="label-name">Low</span><span class="label-count">14</span></div>
+          <div style="margin-top: 16px; display: flex; justify-content: center;">
+            <div class="trust-card" style="font-size: 18px;">
+              <div class="tc-head">
+                <div class="tc-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9l-4.6 1.9L12 15l-1.9-4.1L5.5 9l4.6-1.4L12 3z"/><path d="M19 14l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2z"/></svg>
+                </div>
+                <div class="tc-titles">
+                  <div class="tc-title">AI Classification</div>
+                  <div class="tc-sub">Confidence distribution</div>
+                </div>
+                <div class="tc-pill">117</div>
+              </div>
+              <div class="tc-rows">
+                <div class="tc-row">
+                  <div class="tc-status high"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></div>
+                  <div class="tc-label"><span class="name">High</span><span class="count">61 txns</span></div>
+                  <div class="tc-track"><div class="tc-fill" style="width: 55%;"></div></div>
+                  <div class="tc-pct high">55%</div>
+                </div>
+                <div class="tc-row">
+                  <div class="tc-status med"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/></svg></div>
+                  <div class="tc-label"><span class="name">Medium</span><span class="count">42 txns</span></div>
+                  <div class="tc-track"><div class="tc-fill" style="width: 34%;"></div></div>
+                  <div class="tc-pct med">34%</div>
+                </div>
+                <div class="tc-row">
+                  <div class="tc-status low"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg></div>
+                  <div class="tc-label"><span class="name">Low</span><span class="count">14 txns</span></div>
+                  <div class="tc-track"><div class="tc-fill" style="width: 11%;"></div></div>
+                  <div class="tc-pct low">11%</div>
+                </div>
+              </div>
+              <div class="tc-foot">
+                <span class="lbl">Total Classified</span>
+                <span class="val">117 transactions</span>
               </div>
             </div>
           </div>
         </div>
         <div class="stack-tight" style="display: flex; flex-direction: column;">
           <div class="label-overline" style="text-align: center;">Symplify &nbsp;·&nbsp; Healthcare</div>
-          <div class="asset-frame" style="aspect-ratio: 1932 / 2890; width: 100%; margin: 12px auto 0; background: transparent; box-shadow: none; border: none;">
-            <img src="./assets/symplify-ai-assistant-popup.png" alt="Symplify AI Assistant Popup" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
-            <div class="placeholder">
-              <div class="ph-label">Asset placeholder</div>
-              <div class="ph-file">symplify-ai-assistant-popup.png</div>
-              <div class="ph-source">Source: Symplify-1.7.4/src/feature-module/components/ai/ — AIAssistantPopup with ConfidenceIndicator and HIPAABadge visible</div>
+          <div style="margin-top: 16px; display: flex; justify-content: center;">
+            <div class="assistant-card" style="font-size: 16px; max-width: 420px;">
+              <div class="ac-head">
+                <div class="ac-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="11" rx="2.5"/><path d="M12 8V5M12 5a1.4 1.4 0 100-2.8A1.4 1.4 0 0012 5z"/><circle cx="9" cy="13" r="1.1" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r="1.1" fill="currentColor" stroke="none"/></svg></div>
+                <div class="ac-id"><span class="ac-name">AI Assistant</span><span class="ac-status">Online</span></div>
+                <div class="ac-win"><span>&minus;</span><span>&times;</span></div>
+              </div>
+              <div class="ac-body">
+                <div class="ac-msg">
+                  <div class="ac-bot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="11" rx="2.5"/><path d="M12 8V5"/><circle cx="9" cy="13" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r="1" fill="currentColor" stroke="none"/></svg></div>
+                  <div class="ac-bubble">Hello Jimmy Anderson! I&rsquo;m your AI Assistant for Symplify. I can help with scheduling, drug interaction checks, triage assessments, clinical alerts, shift handoffs, and more. How can I assist you today?<span class="ac-time">07:05 PM</span></div>
+                </div>
+                <div class="ac-tabs">
+                  <div class="ac-tab active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-3 3a3 3 0 004 4l1-1"/><path d="M15 18l3-3a3 3 0 00-4-4l-1 1"/></svg></div>
+                  <div class="ac-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5 5.5.5-4 3.7 1.2 5.3L12 20l-5.2 2.8L8 16.2 4 12.5 9.5 12 12 3z"/></svg></div>
+                  <div class="ac-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></svg></div>
+                  <div class="ac-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 000 18M12 3a14 14 0 010 18"/></svg></div>
+                </div>
+                <div class="ac-chips">
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-3 3a3 3 0 004 4l1-1"/><path d="M15 18l3-3a3 3 0 00-4-4l-1 1"/></svg>Drug Interaction Check</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a2 2 0 012-2h14a2 2 0 012 2v6M3 14h18M6 10V7a1 1 0 011-1h4v4"/></svg>Bed Availability</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 9h16M8 3v4M16 3v4"/></svg>Schedule Appointment</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0112 0M16 11l2 2 4-4"/></svg>Staff Schedule</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg>Compliance Status</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Pending Approvals</div>
+                </div>
+                <div class="ac-input">
+                  <span class="ph">Type your message...</span>
+                  <div class="ac-send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></div>
+                </div>
+                <div class="ac-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6l8-3z"/></svg>HIPAA Compliant</div>
+              </div>
             </div>
           </div>
         </div>
@@ -1157,55 +1435,6 @@
     </div>
   </section>
 
-  <!-- =====================================================================
-       SLIDE 19 — SYMPLIFY: ROLE-AWARE UI
-       Three-column pattern lock.
-       Script pairing: 20:30–22:00 (FIRST TO CUT if pacing slips — Cut #2)
-       ===================================================================== -->
-  <section class="slide slide--asset-led" data-slide="19">
-    <div class="slide-inner">
-      <h2 class="display-m">Role isn't permissions. It's calibration.</h2>
-      <div class="spacer"></div>
-      <div class="row-3" style="margin-bottom: 2%; min-height: 760px; align-items: stretch;">
-        <div class="stack-tight" style="display: flex; flex-direction: column;">
-          <div class="label-overline">Admin</div>
-          <div class="asset-frame" style="flex: 1; margin-top: 10px;">
-            <img src="./assets/symplify-sidebar-admin.png" alt="Admin sidebar" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
-            <div class="placeholder">
-              <div class="ph-label">Asset</div>
-              <div class="ph-file">symplify-sidebar-admin.png</div>
-              <div class="ph-source" style="font-size: 11px;">src/core/common/ — Sidebar (admin)</div>
-            </div>
-          </div>
-          <div class="body-s" style="margin-top: 10px;">Sees numeric confidence values.</div>
-        </div>
-        <div class="stack-tight" style="display: flex; flex-direction: column;">
-          <div class="label-overline">Doctor</div>
-          <div class="asset-frame" style="flex: 1; margin-top: 10px;">
-            <img src="./assets/symplify-sidebar-doctor.png" alt="Doctor sidebar" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
-            <div class="placeholder">
-              <div class="ph-label">Asset</div>
-              <div class="ph-file">symplify-sidebar-doctor.png</div>
-              <div class="ph-source" style="font-size: 11px;">src/core/common/ — SidebarTwo (doctor)</div>
-            </div>
-          </div>
-          <div class="body-s" style="margin-top: 10px;">Sees three-band confidence.</div>
-        </div>
-        <div class="stack-tight" style="display: flex; flex-direction: column;">
-          <div class="label-overline">Patient</div>
-          <div class="asset-frame" style="flex: 1; margin-top: 10px;">
-            <img src="./assets/symplify-sidebar-patient.png" alt="Patient sidebar" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
-            <div class="placeholder">
-              <div class="ph-label">Asset</div>
-              <div class="ph-file">symplify-sidebar-patient.png</div>
-              <div class="ph-source" style="font-size: 11px;">src/core/common/ — Sidebarthree (patient)</div>
-            </div>
-          </div>
-          <div class="body-s" style="margin-top: 10px;">Sees only clinician-approved output. No AI surface.</div>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- =====================================================================
        SLIDE 20 — SYMPLIFY: OUTCOMES
@@ -1234,31 +1463,82 @@
     <div class="slide-inner">
       <h2 class="display-m" style="text-align: center; max-width: 100%;">Same primitive. Two regulated verticals.</h2>
       <div class="spacer"></div>
-      <div style="display: grid; grid-template-columns: 1.45fr 0.75fr; gap: 8%; align-items: end; margin-bottom: 6%; min-height: 720px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6%; align-items: center; margin-bottom: 6%; min-height: 720px;">
         <div class="stack-tight" style="display: flex; flex-direction: column;">
           <div class="label-overline" style="text-align: center;">Computis &nbsp;·&nbsp; Finance &nbsp;·&nbsp; CPAs</div>
-          <div class="asset-frame" style="aspect-ratio: 3352 / 2004; width: 100%; margin-top: 12px; background: transparent; box-shadow: none; border: none;">
-            <img src="./assets/computis-classification-insights.png" alt="Computis classification insights" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
-            <div class="placeholder">
-              <div class="ph-label">Asset placeholder</div>
-              <div class="ph-file">computis-classification-insights.png</div>
-              <div class="ph-source">Same asset as slides 6, 14</div>
-              <div style="display: flex; flex-direction: column; gap: 6px; width: 100%; max-width: 260px; margin-top: 8px;">
-                <div class="conf-tile high"><span class="dot"></span><span class="label-name">High</span><span class="label-count">61</span></div>
-                <div class="conf-tile med"><span class="dot"></span><span class="label-name">Medium</span><span class="label-count">42</span></div>
-                <div class="conf-tile low"><span class="dot"></span><span class="label-name">Low</span><span class="label-count">14</span></div>
+          <div style="margin-top: 16px; display: flex; justify-content: center;">
+            <div class="trust-card" style="font-size: 18px;">
+              <div class="tc-head">
+                <div class="tc-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9l-4.6 1.9L12 15l-1.9-4.1L5.5 9l4.6-1.4L12 3z"/><path d="M19 14l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2z"/></svg>
+                </div>
+                <div class="tc-titles">
+                  <div class="tc-title">AI Classification</div>
+                  <div class="tc-sub">Confidence distribution</div>
+                </div>
+                <div class="tc-pill">117</div>
+              </div>
+              <div class="tc-rows">
+                <div class="tc-row">
+                  <div class="tc-status high"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></div>
+                  <div class="tc-label"><span class="name">High</span><span class="count">61 txns</span></div>
+                  <div class="tc-track"><div class="tc-fill" style="width: 55%;"></div></div>
+                  <div class="tc-pct high">55%</div>
+                </div>
+                <div class="tc-row">
+                  <div class="tc-status med"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/></svg></div>
+                  <div class="tc-label"><span class="name">Medium</span><span class="count">42 txns</span></div>
+                  <div class="tc-track"><div class="tc-fill" style="width: 34%;"></div></div>
+                  <div class="tc-pct med">34%</div>
+                </div>
+                <div class="tc-row">
+                  <div class="tc-status low"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg></div>
+                  <div class="tc-label"><span class="name">Low</span><span class="count">14 txns</span></div>
+                  <div class="tc-track"><div class="tc-fill" style="width: 11%;"></div></div>
+                  <div class="tc-pct low">11%</div>
+                </div>
+              </div>
+              <div class="tc-foot">
+                <span class="lbl">Total Classified</span>
+                <span class="val">117 transactions</span>
               </div>
             </div>
           </div>
         </div>
         <div class="stack-tight" style="display: flex; flex-direction: column;">
           <div class="label-overline" style="text-align: center;">Symplify &nbsp;·&nbsp; Healthcare &nbsp;·&nbsp; Clinicians</div>
-          <div class="asset-frame" style="aspect-ratio: 1932 / 2890; width: 100%; margin: 12px auto 0; background: transparent; box-shadow: none; border: none;">
-            <img src="./assets/symplify-ai-assistant-popup.png" alt="Symplify AI Assistant Popup" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
-            <div class="placeholder">
-              <div class="ph-label">Asset placeholder</div>
-              <div class="ph-file">symplify-ai-assistant-popup.png</div>
-              <div class="ph-source">Same asset as slides 14, 17 (smaller crop)</div>
+          <div style="margin-top: 16px; display: flex; justify-content: center;">
+            <div class="assistant-card" style="font-size: 16px; max-width: 420px;">
+              <div class="ac-head">
+                <div class="ac-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="11" rx="2.5"/><path d="M12 8V5M12 5a1.4 1.4 0 100-2.8A1.4 1.4 0 0012 5z"/><circle cx="9" cy="13" r="1.1" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r="1.1" fill="currentColor" stroke="none"/></svg></div>
+                <div class="ac-id"><span class="ac-name">AI Assistant</span><span class="ac-status">Online</span></div>
+                <div class="ac-win"><span>&minus;</span><span>&times;</span></div>
+              </div>
+              <div class="ac-body">
+                <div class="ac-msg">
+                  <div class="ac-bot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="11" rx="2.5"/><path d="M12 8V5"/><circle cx="9" cy="13" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r="1" fill="currentColor" stroke="none"/></svg></div>
+                  <div class="ac-bubble">Hello Jimmy Anderson! I&rsquo;m your AI Assistant for Symplify. I can help with scheduling, drug interaction checks, triage assessments, clinical alerts, shift handoffs, and more. How can I assist you today?<span class="ac-time">07:05 PM</span></div>
+                </div>
+                <div class="ac-tabs">
+                  <div class="ac-tab active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-3 3a3 3 0 004 4l1-1"/><path d="M15 18l3-3a3 3 0 00-4-4l-1 1"/></svg></div>
+                  <div class="ac-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5 5.5.5-4 3.7 1.2 5.3L12 20l-5.2 2.8L8 16.2 4 12.5 9.5 12 12 3z"/></svg></div>
+                  <div class="ac-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></svg></div>
+                  <div class="ac-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 000 18M12 3a14 14 0 010 18"/></svg></div>
+                </div>
+                <div class="ac-chips">
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-3 3a3 3 0 004 4l1-1"/><path d="M15 18l3-3a3 3 0 00-4-4l-1 1"/></svg>Drug Interaction Check</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a2 2 0 012-2h14a2 2 0 012 2v6M3 14h18M6 10V7a1 1 0 011-1h4v4"/></svg>Bed Availability</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 9h16M8 3v4M16 3v4"/></svg>Schedule Appointment</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0112 0M16 11l2 2 4-4"/></svg>Staff Schedule</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg>Compliance Status</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Pending Approvals</div>
+                </div>
+                <div class="ac-input">
+                  <span class="ph">Type your message...</span>
+                  <div class="ac-send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></div>
+                </div>
+                <div class="ac-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6l8-3z"/></svg>HIPAA Compliant</div>
+              </div>
             </div>
           </div>
         </div>
@@ -1281,25 +1561,79 @@
       <div class="row-3" style="margin-bottom: 6%; min-height: 640px; align-items: center; gap: 56px;">
         <div class="stack-tight" style="display: flex; flex-direction: column; align-items: center;">
           <div class="label-overline" style="text-align: center;">Computis &nbsp;·&nbsp; Finance</div>
-          <div class="asset-frame" style="aspect-ratio: 3352 / 2004; width: 100%; max-height: 520px; margin-top: 12px; background: transparent; box-shadow: none; border: none;">
-            <img src="./assets/computis-classification-insights.png" alt="Computis" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
-            <div class="placeholder">
-              <div class="ph-file" style="font-size: 12px;">computis-classification-insights.png</div>
-              <div style="display: flex; flex-direction: column; gap: 5px; width: 100%; max-width: 210px; margin-top: 4px;">
-                <div class="conf-tile high" style="padding: 8px 12px; font-size: 12px;"><span class="dot"></span><span class="label-name" style="font-size: 12px;">High</span><span class="label-count" style="font-size: 11px;">61</span></div>
-                <div class="conf-tile med" style="padding: 8px 12px; font-size: 12px;"><span class="dot"></span><span class="label-name" style="font-size: 12px;">Medium</span><span class="label-count" style="font-size: 11px;">42</span></div>
-                <div class="conf-tile low" style="padding: 8px 12px; font-size: 12px;"><span class="dot"></span><span class="label-name" style="font-size: 12px;">Low</span><span class="label-count" style="font-size: 11px;">14</span></div>
+          <div style="width: 100%; margin-top: 12px; display: flex; justify-content: center;">
+            <div class="trust-card" style="font-size: 13px; padding: 1.25em 1.4em; gap: 1em;">
+              <div class="tc-head">
+                <div class="tc-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9l-4.6 1.9L12 15l-1.9-4.1L5.5 9l4.6-1.4L12 3z"/><path d="M19 14l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2z"/></svg>
+                </div>
+                <div class="tc-titles">
+                  <div class="tc-title">AI Classification</div>
+                  <div class="tc-sub">Confidence distribution</div>
+                </div>
+                <div class="tc-pill">117</div>
+              </div>
+              <div class="tc-rows">
+                <div class="tc-row">
+                  <div class="tc-status high"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></div>
+                  <div class="tc-label"><span class="name">High</span><span class="count">61 txns</span></div>
+                  <div class="tc-track"><div class="tc-fill" style="width: 55%;"></div></div>
+                  <div class="tc-pct high">55%</div>
+                </div>
+                <div class="tc-row">
+                  <div class="tc-status med"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/></svg></div>
+                  <div class="tc-label"><span class="name">Medium</span><span class="count">42 txns</span></div>
+                  <div class="tc-track"><div class="tc-fill" style="width: 34%;"></div></div>
+                  <div class="tc-pct med">34%</div>
+                </div>
+                <div class="tc-row">
+                  <div class="tc-status low"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg></div>
+                  <div class="tc-label"><span class="name">Low</span><span class="count">14 txns</span></div>
+                  <div class="tc-track"><div class="tc-fill" style="width: 11%;"></div></div>
+                  <div class="tc-pct low">11%</div>
+                </div>
+              </div>
+              <div class="tc-foot">
+                <span class="lbl">Total Classified</span>
+                <span class="val">117 transactions</span>
               </div>
             </div>
           </div>
         </div>
         <div class="stack-tight" style="display: flex; flex-direction: column; align-items: center;">
           <div class="label-overline" style="text-align: center;">Symplify &nbsp;·&nbsp; Healthcare</div>
-          <div class="asset-frame" style="aspect-ratio: 1932 / 2890; max-height: 620px; margin-top: 12px; background: transparent; box-shadow: none; border: none;">
-            <img src="./assets/symplify-ai-assistant-popup.png" alt="Symplify" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
-            <div class="placeholder">
-              <div class="ph-file" style="font-size: 12px;">symplify-ai-assistant-popup.png</div>
-              <div class="ph-source" style="font-size: 10px;">AIAssistantPopup + ConfidenceIndicator + HIPAABadge</div>
+          <div style="margin-top: 12px; display: flex; justify-content: center; width: 100%;">
+            <div class="assistant-card" style="font-size: 11px; max-width: 300px;">
+              <div class="ac-head">
+                <div class="ac-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="11" rx="2.5"/><path d="M12 8V5M12 5a1.4 1.4 0 100-2.8A1.4 1.4 0 0012 5z"/><circle cx="9" cy="13" r="1.1" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r="1.1" fill="currentColor" stroke="none"/></svg></div>
+                <div class="ac-id"><span class="ac-name">AI Assistant</span><span class="ac-status">Online</span></div>
+                <div class="ac-win"><span>&minus;</span><span>&times;</span></div>
+              </div>
+              <div class="ac-body">
+                <div class="ac-msg">
+                  <div class="ac-bot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="11" rx="2.5"/><path d="M12 8V5"/><circle cx="9" cy="13" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r="1" fill="currentColor" stroke="none"/></svg></div>
+                  <div class="ac-bubble">Hello Jimmy Anderson! I&rsquo;m your AI Assistant for Symplify. I can help with scheduling, drug interaction checks, triage assessments, clinical alerts, shift handoffs, and more. How can I assist you today?<span class="ac-time">07:05 PM</span></div>
+                </div>
+                <div class="ac-tabs">
+                  <div class="ac-tab active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-3 3a3 3 0 004 4l1-1"/><path d="M15 18l3-3a3 3 0 00-4-4l-1 1"/></svg></div>
+                  <div class="ac-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5 5.5.5-4 3.7 1.2 5.3L12 20l-5.2 2.8L8 16.2 4 12.5 9.5 12 12 3z"/></svg></div>
+                  <div class="ac-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></svg></div>
+                  <div class="ac-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 000 18M12 3a14 14 0 010 18"/></svg></div>
+                </div>
+                <div class="ac-chips">
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-3 3a3 3 0 004 4l1-1"/><path d="M15 18l3-3a3 3 0 00-4-4l-1 1"/></svg>Drug Interaction Check</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a2 2 0 012-2h14a2 2 0 012 2v6M3 14h18M6 10V7a1 1 0 011-1h4v4"/></svg>Bed Availability</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 9h16M8 3v4M16 3v4"/></svg>Schedule Appointment</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0112 0M16 11l2 2 4-4"/></svg>Staff Schedule</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg>Compliance Status</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Pending Approvals</div>
+                </div>
+                <div class="ac-input">
+                  <span class="ph">Type your message...</span>
+                  <div class="ac-send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></div>
+                </div>
+                <div class="ac-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6l8-3z"/></svg>HIPAA Compliant</div>
+              </div>
             </div>
           </div>
         </div>
