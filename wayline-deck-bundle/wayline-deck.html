@@ -40,8 +40,8 @@
     --mono:  "JetBrains Mono", "SF Mono", Menlo, monospace;
 
     /* Geometric tokens */
-    --slide-w: 1600px;
-    --slide-h: 900px;             /* 16:9 */
+    --slide-w: 1920px;
+    --slide-h: 1080px;            /* 16:9 — resized from 1600×900 for asset breathing room */
     --pad-x: 9.5%;
     --pad-y: 8%;
     --gutter: 6%;
@@ -590,7 +590,7 @@
 
   /* Print to PDF — used by Cmd+P export */
   @media print {
-    @page { size: 1600px 900px; margin: 0; }
+    @page { size: 1920px 1080px; margin: 0; }
     body { background: #fff; overflow: visible; height: auto; }
     .nav-chrome, .timeline { display: none !important; }
     .stage { position: static; }
@@ -598,8 +598,8 @@
       display: block !important;
       page-break-after: always;
       transform: none !important;
-      width: 1600px;
-      height: 900px;
+      width: 1920px;
+      height: 1080px;
     }
     .slide:last-child { page-break-after: auto; }
   }
@@ -1651,14 +1651,14 @@
     showChrome();
 
     // ========================================================================
-    // SLIDE SCALING — keep 1600x900 always-fits-the-viewport
+    // SLIDE SCALING — keep 1920x1080 always-fits-the-viewport
     // ========================================================================
     function scaleSlides() {
       const margin = 40;
       const aw = window.innerWidth - margin;
       const ah = window.innerHeight - margin;
-      const sx = aw / 1600;
-      const sy = ah / 900;
+      const sx = aw / 1920;
+      const sy = ah / 1080;
       const s = Math.min(sx, sy);
       slides.forEach(sl => { sl.style.transform = 'scale(' + s + ')'; });
     }
