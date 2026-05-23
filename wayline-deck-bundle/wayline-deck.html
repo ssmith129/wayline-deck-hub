@@ -89,6 +89,32 @@
   }
 
   /* =========================================================================
+     TITLE-ANCHOR SYSTEM
+     Standard title/content slides anchor their heading at Y 112, measured
+     from the top of .slide-inner (i.e. inside the existing --pad-y top inset).
+     The first child of a .slide--top-anchor .slide-inner gets a 112px top
+     offset; left/right/bottom padding are preserved exactly as before.
+
+     Applied to: 2, 5, 6, 7, 8, 9, 10, 11, 12, 13, 16, 17, 18, 20, 24.
+     NOT applied to low-anchored stakes slides (1, 3, 4, 15, 26) or to the
+     centered-synthesis / left-aligned exceptions (14, 21, 22, 23, 25).
+     ========================================================================= */
+  .slide--top-anchor .slide-inner > :first-child { margin-top: 112px; }
+
+  /* Neutralize per-slide nudges that fight the uniform anchor.
+     (Slide 7's heading carried a -8px pull; the anchor replaces it.) */
+  .slide--top-anchor .slide-inner > h2:first-child { margin-top: 112px !important; }
+
+  /* TITLE BLOCK — title + subtitle pair with a fixed 27px gap.
+     Wrap a heading and its immediately-following descriptive line in
+     <div class="title-block"> to lock the subtitle 27px below the title,
+     regardless of the heading's own line-height. The block itself is the
+     anchored first child, so it inherits the 112px top offset above. */
+  .title-block { display: flex; flex-direction: column; }
+  .title-block > * { margin-top: 0 !important; }
+  .title-block > * + * { margin-top: 27px !important; }
+
+  /* =========================================================================
      TYPOGRAPHY PRIMITIVES
      ========================================================================= */
   .display-xl {
@@ -844,7 +870,7 @@
        ===================================================================== -->
   <section class="slide" data-slide="1">
     <div class="slide-inner">
-      <div style="height: 22%;"></div>
+      <div style="height: 170px;"></div>
       <h1 class="display-xl left-anchor">The trust surface between a&nbsp;professional and an AI.</h1>
       <div style="margin-top: 48px;" class="metadata">
         Sean Smith &nbsp;·&nbsp; Founding Product Designer Candidate &nbsp;·&nbsp; Wayline &nbsp;·&nbsp; May&nbsp;20,&nbsp;2026
@@ -857,7 +883,7 @@
        Three-column pattern (first appearance — establishes the spine).
        Script pairing: 0:30–1:30
        ===================================================================== -->
-  <section class="slide" data-slide="2">
+  <section class="slide slide--top-anchor" data-slide="2">
     <div class="slide-inner">
       <h2 class="display-l">The next 30&nbsp;minutes.</h2>
       <div class="spacer"></div>
@@ -888,7 +914,7 @@
        ===================================================================== -->
   <section class="slide" data-slide="3">
     <div class="slide-inner">
-      <div style="height: 22%;"></div>
+      <div style="height: 170px;"></div>
       <div class="display-xl left-anchor">11:00&nbsp;PM. April&nbsp;14th.</div>
       <div style="margin-top: 36px;" class="body-l left-anchor">
         47 client wallets. 200,000+ transactions. One deadline that doesn't move.
@@ -903,7 +929,7 @@
        ===================================================================== -->
   <section class="slide" data-slide="4">
     <div class="slide-inner">
-      <div style="height: 22%;"></div>
+      <div style="height: 170px;"></div>
       <div class="display-xl left-anchor">32% demo-to-customer conversion gap.</div>
       <div style="margin-top: 36px;" class="body-l left-anchor">
         Prospects loved the demo. Half of them signed. The CPAs who onboarded ghosted in week&nbsp;two.
@@ -916,7 +942,7 @@
        First slide to use the accent color (small labels only).
        Script pairing: 3:15–4:00
        ===================================================================== -->
-  <section class="slide" data-slide="5">
+  <section class="slide slide--top-anchor" data-slide="5">
     <div class="slide-inner">
       <h2 class="display-l">Three stakes.</h2>
       <div class="spacer"></div>
@@ -942,11 +968,13 @@
        Two-column before/after. The slide that plants the trust-surface frame.
        Script pairing: 4:00–6:00
        ===================================================================== -->
-  <section class="slide" data-slide="6">
+  <section class="slide slide--top-anchor" data-slide="6">
     <div class="slide-inner">
-      <h2 class="display-m" style="max-width: 70%;">From a percentage to a decision.</h2>
-      <div class="body-m" style="margin-top: 8px; max-width: 70%; color: var(--ink-muted);">
-        The Computis classification surface — confidence as decision-routing.
+      <div class="title-block">
+        <h2 class="display-m" style="max-width: 70%;">From a percentage to a decision.</h2>
+        <div class="body-m" style="max-width: 70%; color: var(--ink-muted);">
+          The Computis classification surface — confidence as decision-routing.
+        </div>
       </div>
       <div class="spacer"></div>
       <div class="row" style="margin-bottom: 4%; align-items: stretch; min-height: 620px; grid-template-columns: 1fr 1.15fr; display: grid; gap: 6%;">
@@ -992,11 +1020,13 @@
        Body-text-plus-screenshot pattern (first appearance).
        Script pairing: 6:00–7:00
        ===================================================================== -->
-  <section class="slide slide--asset-led" data-slide="7">
+  <section class="slide slide--asset-led slide--top-anchor" data-slide="7">
     <div class="slide-inner">
-      <h2 class="display-m" style="max-width: 80%; margin-top: -8px;">Override is the failure mode.</h2>
-      <div class="body-l" style="margin-top: 14px; max-width: 70%;">
-        Bulk-edit entrenches distrust. A rule engine turns every override into permanent training signal the CPA can see and audit.
+      <div class="title-block">
+        <h2 class="display-m" style="max-width: 80%;">Override is the failure mode.</h2>
+        <div class="body-l" style="max-width: 70%;">
+          Bulk-edit entrenches distrust. A rule engine turns every override into permanent training signal the CPA can see and audit.
+        </div>
       </div>
       <div class="asset-frame asset-frame--motion" style="aspect-ratio: 1202 / 724; max-height: 85%; max-width: 100%; margin: 20px auto 0;">
         <img src="./assets/computis-rule-engine.gif" alt="Computis rule engine — rule-authoring flow loop" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
@@ -1015,11 +1045,13 @@
        Pattern lock with slide 7.
        Script pairing: 7:00–8:00
        ===================================================================== -->
-  <section class="slide slide--asset-led" data-slide="8">
+  <section class="slide slide--asset-led slide--top-anchor" data-slide="8">
     <div class="slide-inner">
-      <h2 class="display-m" style="max-width: 86%;">If it recurs, it needs a noun in the URL.</h2>
-      <div class="body-l" style="margin-top: 14px; max-width: 70%;">
-        Anomalies were toast notifications. They were invisible by Tuesday. Now they're a routed triage queue.
+      <div class="title-block">
+        <h2 class="display-m" style="max-width: 86%;">If it recurs, it needs a noun in the URL.</h2>
+        <div class="body-l" style="max-width: 70%;">
+          Anomalies were toast notifications. They were invisible by Tuesday. Now they're a routed triage queue.
+        </div>
       </div>
       <div class="asset-frame" style="aspect-ratio: 8000 / 5000; max-height: 80%; max-width: 100%; margin: 20px auto 0; border: none; background: transparent; box-shadow: none;">
         <img src="./assets/computis-anomaly-route.png" alt="Computis anomaly detection page" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
@@ -1038,7 +1070,7 @@
        Self-audit beat. The 68 is prominent but not grandiose.
        Script pairing: 8:00–9:30
        ===================================================================== -->
-  <section class="slide" data-slide="9">
+  <section class="slide slide--top-anchor" data-slide="9">
     <div class="slide-inner">
       <h2 class="display-m">I shipped this. Then I audited myself.</h2>
       <div class="spacer"></div>
@@ -1072,7 +1104,7 @@
        Four large numbers. Restraint is the visual argument.
        Script pairing: 9:30–10:00
        ===================================================================== -->
-  <section class="slide" data-slide="10">
+  <section class="slide slide--top-anchor" data-slide="10">
     <div class="slide-inner">
       <h2 class="display-m">Measured, not asserted.</h2>
       <div class="spacer"></div>
@@ -1102,7 +1134,7 @@
        Methodology pairing. Pre-empts the C1 objection visually.
        Script pairing: 10:00–10:45
        ===================================================================== -->
-  <section class="slide" data-slide="11">
+  <section class="slide slide--top-anchor" data-slide="11">
     <div class="slide-inner">
       <h2 class="display-m">How we measured.</h2>
       <div class="spacer"></div>
@@ -1130,7 +1162,7 @@
        The "most attackable" line carries the C1 preemption.
        Script pairing: 10:45–11:30
        ===================================================================== -->
-  <section class="slide" data-slide="12">
+  <section class="slide slide--top-anchor" data-slide="12">
     <div class="slide-inner">
       <h2 class="display-m">How we measured (continued).</h2>
       <div class="spacer"></div>
@@ -1158,11 +1190,13 @@
        Figma-to-code split. The "I write the React" beat.
        Script pairing: 11:30–12:15
        ===================================================================== -->
-  <section class="slide" data-slide="13">
+  <section class="slide slide--top-anchor" data-slide="13">
     <div class="slide-inner">
-      <h2 class="display-m">I write the React.</h2>
-      <div class="body-l" style="margin-top: 14px; max-width: 75%;">
-        Computis component library — mine. 49 components on Radix primitives, design system documented alongside the code.
+      <div class="title-block">
+        <h2 class="display-m">I write the React.</h2>
+        <div class="body-l" style="max-width: 75%;">
+          Computis component library — mine. 49 components on Radix primitives, design system documented alongside the code.
+        </div>
       </div>
       <div class="spacer"></div>
       <div class="row" style="margin-bottom: 4%; align-items: stretch; min-height: 640px; gap: 3%;">
@@ -1294,7 +1328,7 @@
        ===================================================================== -->
   <section class="slide" data-slide="15">
     <div class="slide-inner">
-      <div style="height: 22%;"></div>
+      <div style="height: 170px;"></div>
       <div class="display-xl left-anchor">06:45.</div>
       <div style="margin-top: 36px;" class="body-l left-anchor">
         Fifteen minutes from end-of-shift. Eight patients to hand off. The legacy workflow is a verbal walk-and-talk and a Word&nbsp;doc.
@@ -1307,7 +1341,7 @@
        Two-column symmetry. The preemption beat.
        Script pairing: 15:30–16:30
        ===================================================================== -->
-  <section class="slide" data-slide="16">
+  <section class="slide slide--top-anchor" data-slide="16">
     <div class="slide-inner">
       <h2 class="display-m">What was real. What was mocked. Why it didn't matter for design.</h2>
       <div class="spacer"></div>
@@ -1335,11 +1369,13 @@
        Constellation composition: central artifact + 3 peripheral satellites.
        Script pairing: 16:30–18:30
        ===================================================================== -->
-  <section class="slide slide--asset-led" data-slide="17">
+  <section class="slide slide--asset-led slide--top-anchor" data-slide="17">
     <div class="slide-inner">
-      <h2 class="display-m" style="max-width: 75%;">The same primitive — across fourteen features.</h2>
-      <div class="body-m" style="margin-top: 8px; max-width: 75%; color: var(--ink-muted);">
-        Confidence belongs on the output, not on the feature page.
+      <div class="title-block">
+        <h2 class="display-m" style="max-width: 75%;">The same primitive — across fourteen features.</h2>
+        <div class="body-m" style="max-width: 75%; color: var(--ink-muted);">
+          Confidence belongs on the output, not on the feature page.
+        </div>
       </div>
       <div class="spacer"></div>
       <div style="display: grid; grid-template-columns: 1fr 2.2fr 1fr; grid-template-rows: 1fr 1fr; gap: 32px; min-height: 800px; margin-bottom: 4%; align-items: stretch;">
@@ -1397,11 +1433,13 @@
        The Wayline-adjacent slide. Clinical specificity is the move.
        Script pairing: 18:30–20:30
        ===================================================================== -->
-  <section class="slide slide--asset-led" data-slide="18">
+  <section class="slide slide--asset-led slide--top-anchor" data-slide="18">
     <div class="slide-inner">
-      <h2 class="display-m">Input isn&rsquo;t typed. It&rsquo;s inferred.</h2>
-      <div class="body-m" style="margin-top: 8px; max-width: 70%; color: var(--ink-muted);">
-        The clinician&rsquo;s job is to confirm what the system already extracted.
+      <div class="title-block">
+        <h2 class="display-m">Input isn&rsquo;t typed. It&rsquo;s inferred.</h2>
+        <div class="body-m" style="max-width: 70%; color: var(--ink-muted);">
+          The clinician&rsquo;s job is to confirm what the system already extracted.
+        </div>
       </div>
       <div class="spacer"></div>
       <div class="asset-frame" style="height: 72%; margin-bottom: 4%;">
@@ -1435,7 +1473,7 @@
        Three lines, generous white space. The deliberate-breath slide.
        Script pairing: 22:00–23:30
        ===================================================================== -->
-  <section class="slide" data-slide="20">
+  <section class="slide slide--top-anchor" data-slide="20">
     <div class="slide-inner">
       <h2 class="display-m">Three artifacts.</h2>
       <div class="spacer"></div>
@@ -1756,7 +1794,7 @@
        Three-column pattern. Operational specifics.
        Script pairing: 26:30–27:30
        ===================================================================== -->
-  <section class="slide" data-slide="24">
+  <section class="slide slide--top-anchor" data-slide="24">
     <div class="slide-inner">
       <h2 class="display-m">First 90 days.</h2>
       <div class="spacer"></div>
@@ -1805,7 +1843,7 @@
        ===================================================================== -->
   <section class="slide" data-slide="26">
     <div class="slide-inner">
-      <div style="height: 32%;"></div>
+      <div style="height: 210px;"></div>
       <div class="stack" style="max-width: 86%;">
         <div class="display-l">The ask: a two-day work trial.</div>
         <div class="display-s" style="font-weight: 400; color: var(--ink-soft);">Bring me a real Wayline problem.</div>
