@@ -1076,34 +1076,70 @@
 
   <!-- =====================================================================
        SLIDE 9 — COMPUTIS: THE HONEST MISS
-       Self-audit beat. The 68 is prominent but not grandiose.
+       Self-audit beat, native scorecard. Score is the hero (top-right);
+       two-column honesty split below — "what I found" vs "what held up".
+       No screenshot: rebuilt in deck tokens for crisp projection.
        Script pairing: 8:00–9:30
        ===================================================================== -->
   <section class="slide slide--top-anchor" data-slide="9">
     <div class="slide-inner">
-      <h2 class="display-m">I shipped this. Then I audited myself.</h2>
-      <div class="spacer"></div>
-      <div class="row" style="margin-bottom: 4%; align-items: flex-start; gap: 7%;">
-        <div style="display: flex; flex-direction: column; flex: 1; padding-top: 8px;">
-          <div class="body-l" style="margin-bottom: 36px;">
-            Score: <span style="font-family: var(--serif); font-weight: 600; color: var(--ink); font-size: 36px; letter-spacing: -0.01em;">68 / 100</span>. Dated, public, in the repo.
-          </div>
-          <div class="label-overline">What I found</div>
-          <ul class="body-m" style="margin: 14px 0 0; padding-left: 22px; line-height: 1.7;">
-            <li>40% of feature components bypass the design token system.</li>
-            <li>Duplicate <span style="font-family: var(--mono); font-size: 0.92em;">Button</span> components — one core, one "enhanced."</li>
-            <li>Two toast systems running simultaneously.</li>
-            <li>Hardcoded color values in nine files instead of one token.</li>
-          </ul>
+      <!-- Header row: title + subtitle on the left, score as the visual hero on the right -->
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 6%; margin-bottom: 4.5%;">
+        <div>
+          <h2 class="display-m" style="margin: 0;">I shipped this. Then I audited myself.</h2>
+          <div class="metadata" style="margin-top: 16px;">Dated, public, in the repo — not a tidied-up retro.</div>
         </div>
-        <div class="asset-frame" style="flex: 0 0 540px; height: 740px; align-self: flex-start;">
-          <img src="./assets/computis-design-critique.png" alt="Design critique markdown file — Computis v2.0.4, audit score 68 of 100, dated March 29 2023" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
-          <div class="placeholder">
-            <div class="ph-label">Asset placeholder</div>
-            <div class="ph-file">computis-design-critique.png</div>
-            <div class="ph-source">Source: computis-app/DESIGN_CRITIQUE_2026-03-29.md — render the filename in the repo file tree OR the top of the markdown showing the "Audit Score: 68/100" line</div>
+        <div style="text-align: right; flex-shrink: 0;">
+          <div style="font-family: var(--serif); font-weight: 600; font-size: 104px; line-height: 0.88; letter-spacing: -0.022em; color: var(--accent);">68<span style="font-family: var(--sans); font-weight: 400; font-size: 34px; letter-spacing: 0; color: var(--ink-muted);">/100</span></div>
+          <div class="metadata" style="letter-spacing: 0.12em; text-transform: uppercase; font-size: 13px; margin-top: 6px;">Audit score</div>
+        </div>
+      </div>
+
+      <!-- Two-column honesty split: what broke / what held -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4.5%; flex: 1; min-height: 0;">
+
+        <!-- What I found (the misses) -->
+        <div style="display: flex; flex-direction: column;">
+          <div class="label-overline" style="color: var(--band-low-fg); display: flex; align-items: center; gap: 14px; margin-bottom: 26px;">
+            <span style="width: 16px; height: 16px; border-radius: 50%; background: var(--strike); display: inline-block;"></span>What I found
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 20px;">
+            <div style="background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 22px 26px; box-shadow: var(--panel-shadow);">
+              <div style="font-family: var(--sans); font-weight: 500; font-size: 25px; line-height: 1.25; color: var(--ink);">40% of components bypass tokens</div>
+              <div class="body-s" style="font-size: 19px; margin-top: 7px;">~30 hardcoded color instances</div>
+            </div>
+            <div style="background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 22px 26px; box-shadow: var(--panel-shadow);">
+              <div style="font-family: var(--sans); font-weight: 500; font-size: 25px; line-height: 1.25; color: var(--ink);">Duplicate <span style="font-family: var(--mono); font-size: 0.82em;">Button</span> components</div>
+              <div class="body-s" style="font-size: 19px; margin-top: 7px;">Core vs. “enhanced” — consumer confusion</div>
+            </div>
+            <div style="background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 22px 26px; box-shadow: var(--panel-shadow);">
+              <div style="font-family: var(--sans); font-weight: 500; font-size: 25px; line-height: 1.25; color: var(--ink);">Two toast systems at once</div>
+              <div class="body-s" style="font-size: 19px; margin-top: 7px;">Plus one hex repeated across nine files</div>
+            </div>
           </div>
         </div>
+
+        <!-- What held up (the genuine strengths) -->
+        <div style="display: flex; flex-direction: column;">
+          <div class="label-overline" style="color: var(--band-high-fg); display: flex; align-items: center; gap: 14px; margin-bottom: 26px;">
+            <span style="width: 16px; height: 16px; border-radius: 50%; background: var(--accent); display: inline-block;"></span>What held up
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 20px;">
+            <div style="background: var(--accent-soft); border-radius: 8px; padding: 22px 26px;">
+              <div style="font-family: var(--sans); font-weight: 500; font-size: 25px; line-height: 1.25; color: var(--ink);">Token architecture is sound</div>
+              <div class="body-s" style="font-size: 19px; margin-top: 7px; color: var(--ink-soft);">CSS vars → Tailwind → CVA</div>
+            </div>
+            <div style="background: var(--accent-soft); border-radius: 8px; padding: 22px 26px;">
+              <div style="font-family: var(--sans); font-weight: 500; font-size: 25px; line-height: 1.25; color: var(--ink);">Naming 100% consistent</div>
+              <div class="body-s" style="font-size: 19px; margin-top: 7px; color: var(--ink-soft);">Typography scale: zero drift</div>
+            </div>
+            <div style="background: var(--accent-soft); border-radius: 8px; padding: 22px 26px;">
+              <div style="font-family: var(--sans); font-weight: 500; font-size: 25px; line-height: 1.25; color: var(--ink);">Accessibility primitives solid</div>
+              <div class="body-s" style="font-size: 19px; margin-top: 7px; color: var(--ink-soft);">Radix · focus-visible · reduced-motion</div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
