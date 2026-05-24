@@ -1239,34 +1239,40 @@
     <div class="slide-inner">
       <div class="title-block">
         <h2 class="display-m">I write the React.</h2>
-        <div class="body-l" style="max-width: 75%;">
-          Computis component library — mine. 49 components on Radix primitives, design system documented alongside the code.
+        <div class="body-l" style="max-width: 78%;">
+          49 components on Radix primitives — the design system and the code that renders it are both mine. Same source data, two representations.
         </div>
       </div>
-      <div class="spacer"></div>
-      <div class="row" style="margin-bottom: 4%; align-items: stretch; min-height: 640px; gap: 3%;">
-        <div class="stack-tight" style="display: flex; flex-direction: column;">
-          <div class="label-overline">Figma — source of truth</div>
-          <div class="asset-frame" style="flex: 1; margin-top: 10px;">
-            <img src="./assets/figma-classification-insights.png" alt="Figma source for classification-insights" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
-            <div class="placeholder">
+      <div class="row" style="flex: 1; min-height: 0; margin-top: 64px; margin-bottom: 4%; align-items: center; display: grid; grid-template-columns: 1.32fr 1fr; gap: 54px;">
+
+        <div style="display: flex; flex-direction: column;">
+          <div class="label-overline" style="display: flex; align-items: center; gap: 14px; margin-bottom: 22px;">
+            <span style="width: 14px; height: 14px; border-radius: 50%; background: var(--accent); display: inline-block;"></span>Figma — what the user sees
+          </div>
+          <div class="asset-frame" style="background: var(--panel); border: 1px solid var(--rule); box-shadow: var(--panel-shadow); border-radius: 14px; padding: 40px 44px; display: block;">
+            <img src="./assets/figma-classification-insights-clean.png" alt="Figma render of the classification-insights confidence panel — High, Medium, Low bands with counts and Review actions" style="width: 100%; height: auto; object-fit: contain; display: block;" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+            <div class="placeholder" style="position: static; min-height: 360px;">
               <div class="ph-label">Asset placeholder</div>
-              <div class="ph-file">figma-classification-insights.png</div>
-              <div class="ph-source">Source: your Figma file — the classification-insights frame</div>
+              <div class="ph-file">figma-classification-insights-clean.png</div>
+              <div class="ph-source">Run build-slide13-assets.py to generate this (border-cropped from figma-classification-insights.png).</div>
             </div>
           </div>
         </div>
-        <div class="stack-tight" style="display: flex; flex-direction: column;">
-          <div class="label-overline">React — source of record</div>
-          <div class="asset-frame" style="flex: 1; margin-top: 10px;">
-            <img src="./assets/code-classification-insights.png" alt="React component code from the repo" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
-            <div class="placeholder">
+
+        <div style="display: flex; flex-direction: column;">
+          <div class="label-overline" style="color: var(--ink-muted); display: flex; align-items: center; gap: 14px; margin-bottom: 22px;">
+            <span style="width: 14px; height: 14px; border-radius: 50%; background: var(--ink-muted); display: inline-block;"></span>React — the code I wrote
+          </div>
+          <div class="asset-frame asset-frame--motion" style="border-radius: 14px; display: block; overflow: visible;">
+            <img src="./assets/code-classification-insights-dark.png" alt="classification-insights.tsx — the classificationData array and the render JSX that maps it to Progress bars and Review buttons" style="width: 100%; height: auto; object-fit: contain; display: block; border-radius: 14px; box-shadow: 0 14px 50px rgba(22,21,19,0.18);" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+            <div class="placeholder" style="position: static; min-height: 360px;">
               <div class="ph-label">Asset placeholder</div>
-              <div class="ph-file">code-classification-insights.png</div>
-              <div class="ph-source">Source: computis-app/client/components/transactions/classification-insights.tsx — syntax-highlighted screenshot, readable at projection scale</div>
+              <div class="ph-file">code-classification-insights-dark.png</div>
+              <div class="ph-source">Run build-slide13-assets.py to generate this dark-theme render of classification-insights.tsx.</div>
             </div>
           </div>
         </div>
+
       </div>
     </div>
   </section>
