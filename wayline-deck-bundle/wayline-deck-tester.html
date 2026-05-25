@@ -1,0 +1,2055 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>[TESTER] The trust surface between a professional and an AI — Sean Smith for Wayline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  /* =========================================================================
+     DECK-WIDE VISUAL SYSTEM
+     Established once, applied everywhere. See Artifact 2 deck-wide system.
+     ========================================================================= */
+  :root {
+    /* Color tokens */
+    --bg: #FAFAF8;
+    --ink: #161513;
+    --ink-soft: #4A4844;
+    --ink-muted: #8C8A85;
+    --ink-faint: #C8C5BF;
+    --rule: #E2DFD8;
+    --panel: #FFFFFF;
+    --panel-shadow: 0 1px 2px rgba(22, 21, 19, 0.04), 0 8px 24px rgba(22, 21, 19, 0.06);
+    --accent: #2E5D4F;            /* deep muted green — confidence, not alarm */
+    --accent-soft: #E8EFEC;
+    --strike: #B43E2E;            /* used once — the seamlessly strikethrough */
+
+    /* Highlight bands — appear only on confidence-banded artifacts */
+    --band-high-bg: #E6EFE7;
+    --band-high-fg: #2E5D4F;
+    --band-med-bg: #FAF1DC;
+    --band-med-fg: #8A6418;
+    --band-low-bg: #F6E2DD;
+    --band-low-fg: #A33A28;
+
+    /* Type tokens */
+    --serif: "Fraunces", "Iowan Old Style", Georgia, serif;
+    --sans:  "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --mono:  "JetBrains Mono", "SF Mono", Menlo, monospace;
+
+    /* Geometric tokens */
+    --slide-w: 1920px;
+    --slide-h: 1080px;            /* 16:9 — resized from 1600×900 for asset breathing room */
+    --pad-x: 9.5%;
+    --pad-y: 8%;
+    --gutter: 6%;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #1a1a1a;          /* viewer chrome */
+    font-family: var(--sans);
+    color: var(--ink);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* =========================================================================
+     STAGE — the slide container. Always 16:9, always centered, scales to fit.
+     ========================================================================= */
+  .stage {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .slide {
+    width: var(--slide-w);
+    height: var(--slide-h);
+    background: var(--bg);
+    color: var(--ink);
+    position: relative;
+    transform-origin: center center;
+    /* JS sets transform: scale(...) */
+    display: none;
+  }
+  .slide.active { display: block; }
+  .slide-inner {
+    position: absolute;
+    inset: 0;
+    padding: var(--pad-y) var(--pad-x);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* =========================================================================
+     TITLE-ANCHOR SYSTEM
+     Standard title/content slides anchor their heading at Y 112, measured
+     from the top of .slide-inner (i.e. inside the existing --pad-y top inset).
+     The first child of a .slide--top-anchor .slide-inner gets a 112px top
+     offset; left/right/bottom padding are preserved exactly as before.
+
+     Applied to: 2, 5, 6, 7, 8, 9, 10, 11, 12, 13, 16, 17, 18, 20, 24.
+     NOT applied to low-anchored stakes slides (1, 3, 4, 15, 26) or to the
+     centered-synthesis / left-aligned exceptions (14, 21, 22, 23, 25).
+     ========================================================================= */
+  .slide--top-anchor .slide-inner > :first-child { margin-top: 112px; }
+
+  /* Neutralize per-slide nudges that fight the uniform anchor.
+     (Slide 7's heading carried a -8px pull; the anchor replaces it.) */
+  .slide--top-anchor .slide-inner > h2:first-child { margin-top: 112px !important; }
+
+  /* TITLE BLOCK — title + subtitle pair with a fixed 27px gap.
+     Wrap a heading and its immediately-following descriptive line in
+     <div class="title-block"> to lock the subtitle 27px below the title,
+     regardless of the heading's own line-height. The block itself is the
+     anchored first child, so it inherits the 112px top offset above. */
+  .title-block { display: flex; flex-direction: column; }
+  .title-block > * { margin-top: 0 !important; }
+  .title-block > * + * { margin-top: 27px !important; }
+
+  /* =========================================================================
+     TYPOGRAPHY PRIMITIVES
+     ========================================================================= */
+  .display-xl {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 84px;
+    line-height: 1.04;
+    letter-spacing: -0.018em;
+    color: var(--ink);
+  }
+  .display-l {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 64px;
+    line-height: 1.06;
+    letter-spacing: -0.014em;
+    color: var(--ink);
+  }
+  .display-m {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 44px;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .display-s {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 1.16;
+    letter-spacing: -0.006em;
+    color: var(--ink);
+  }
+  .body-l {
+    font-family: var(--sans);
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 1.45;
+    color: var(--ink-soft);
+  }
+  .body-m {
+    font-family: var(--sans);
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+  .body-s {
+    font-family: var(--sans);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink-muted);
+  }
+  .label-overline {
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .metadata {
+    font-family: var(--sans);
+    font-weight: 400;
+    font-size: 14px;
+    color: var(--ink-muted);
+    letter-spacing: 0.01em;
+  }
+  .italic { font-style: italic; }
+
+  /* Number display — only used on slide 10 */
+  .number-display {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 132px;
+    line-height: 0.94;
+    letter-spacing: -0.022em;
+    color: var(--ink);
+  }
+  .number-caption {
+    font-family: var(--sans);
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--ink-muted);
+    margin-top: 18px;
+    max-width: 220px;
+  }
+
+  /* =========================================================================
+     PROGRESSIVE-ENHANCEMENT ASSET PLACEHOLDERS
+     Per spec (iii): <img> with onerror fallback to a labeled placeholder box.
+     Drop real files into /assets/ folder using the named filenames.
+     ========================================================================= */
+  .asset-frame {
+    position: relative;
+    background: var(--panel);
+    box-shadow: var(--panel-shadow);
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+  }
+  .asset-frame img,
+  .asset-frame video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;     /* never crop product screenshots */
+    object-position: center;
+    display: block;
+  }
+  .asset-frame .placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background:
+      repeating-linear-gradient(
+        45deg,
+        var(--bg) 0px,
+        var(--bg) 14px,
+        #F2EFE8 14px,
+        #F2EFE8 28px
+      );
+    color: var(--ink-soft);
+    padding: 32px;
+    text-align: center;
+    gap: 12px;
+  }
+  .placeholder .ph-label {
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .placeholder .ph-file {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--panel);
+    padding: 8px 14px;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  }
+  .placeholder .ph-source {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--ink-muted);
+    max-width: 60%;
+    line-height: 1.5;
+  }
+  .placeholder.is-loaded { display: none; }
+
+  /* =========================================================================
+     LAYOUT PRIMITIVES
+     ========================================================================= */
+  .stack-tight > * + * { margin-top: 16px; }
+  .stack > * + *       { margin-top: 28px; }
+  .stack-loose > * + * { margin-top: 48px; }
+  .stack-huge > * + *  { margin-top: 96px; }
+
+  .row { display: flex; gap: 6%; }
+  .row > * { flex: 1; }
+  .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 80px; }
+  .row-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 56px; }
+
+  .pin-tl { margin-top: 0; }
+  .pin-tr { text-align: right; }
+  .spacer { flex: 1; }
+  .center-y { display: flex; flex-direction: column; justify-content: center; height: 100%; }
+  .center-xy { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
+  .left-anchor { max-width: 78%; }
+
+  /* Three-stack divider — used on the spoken close */
+  .stack-spoken > * + * { margin-top: 56px; }
+
+  /* =========================================================================
+     SLIDE--ASSET-LED MODIFIER
+     Applied to slides where the screenshot is the argument, not the caption.
+     Reduces heading dominance, expands asset region, lets contain-fit do its job.
+     Slides: 7, 8, 17, 18, 19, 20
+     ========================================================================= */
+  .slide--asset-led .display-m {
+    font-size: 32px;            /* down from 44 */
+    line-height: 1.12;
+  }
+  .slide--asset-led .body-l {
+    font-size: 18px;            /* down from 24 */
+    line-height: 1.45;
+    margin-top: 8px !important; /* down from 14 */
+  }
+  .slide--asset-led .body-m {
+    font-size: 15px;            /* down from 18 */
+    margin-top: 6px !important;
+  }
+  /* The slide-inner caption/subhead area is now ~80px instead of ~180px,
+     buying ~100px of vertical real estate for the asset region. */
+  .slide--asset-led .asset-frame {
+    background: var(--bg);      /* matte bg so contain-letterboxing reads as deliberate */
+    box-shadow: none;
+    border: 1px solid var(--rule);
+  }
+
+  /* =========================================================================
+     ASSET-FRAME--MOTION MODIFIER
+     Reusable treatment for any video/MP4 frame. Strips all panel chrome so the
+     frame hugs the video edge directly. Use with an inline aspect-ratio matching
+     the source video's native dimensions.
+
+     Apply to slide 7 (computis-rule-engine.mp4) and slide 18 (symplify voice MP4
+     when produced). Future MP4 loops should adopt this class — do not re-author
+     the treatment inline.
+
+     Usage:
+       <div class="asset-frame asset-frame--motion"
+            style="aspect-ratio: 1920 / 1246;
+                   width: 108%;
+                   margin-left: -4%;">
+         <video src="./assets/your-asset.mp4" autoplay muted loop playsinline ...>
+         </video>
+       </div>
+
+     The aspect-ratio above is for the current rule-engine MP4 — replace with
+     your video's actual dimensions when adding new motion artifacts.
+     The 108% width + -4% margin-left produces the "moderate" full-bleed effect —
+     frame breaks out ~4% past slide-inner padding on each side.
+     ========================================================================= */
+  .asset-frame--motion {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* =========================================================================
+     CONFIDENCE-BAND TILES — reused on slides 6, 14, 21, 22
+     ========================================================================= */
+  .conf-tile {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    border-radius: 6px;
+    font-family: var(--sans);
+  }
+  .conf-tile.high { background: var(--band-high-bg); color: var(--band-high-fg); }
+  .conf-tile.med  { background: var(--band-med-bg);  color: var(--band-med-fg); }
+  .conf-tile.low  { background: var(--band-low-bg);  color: var(--band-low-fg); }
+  .conf-tile .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: currentColor;
+    flex: 0 0 10px;
+  }
+  .conf-tile .label-name {
+    font-weight: 600;
+    font-size: 14px;
+    flex: 1;
+  }
+  .conf-tile .label-count {
+    font-family: var(--mono);
+    font-size: 13px;
+    opacity: 0.7;
+  }
+
+  /* =========================================================================
+     LIVE TRUST-SURFACE COMPONENTS — pure HTML/CSS renditions, no PNG assets
+     Reused on slides 14, 21, 22. All internal sizing is in em, so the panel
+     scales with the font-size set on the .trust-card / .assistant-card root.
+     Status colors reuse the confidence-band tokens established above.
+     ========================================================================= */
+
+  /* ---- AI Classification confidence card (Computis / Finance) ---- */
+  .trust-card {
+    font-size: 16px;                 /* scale knob — override per slide */
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 0.75em;
+    box-shadow: var(--panel-shadow);
+    padding: 1.5em 1.75em;
+    font-family: var(--sans);
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25em;
+  }
+  .trust-card .tc-head {
+    display: flex;
+    align-items: center;
+    gap: 0.875em;
+  }
+  .trust-card .tc-icon {
+    flex: 0 0 2.75em;
+    height: 2.75em;
+    border-radius: 0.6em;
+    background: #EAF0FB;
+    color: #3B6FD4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .trust-card .tc-icon svg { width: 1.5em; height: 1.5em; }
+  .trust-card .tc-titles { flex: 1; display: flex; flex-direction: column; gap: 0.15em; }
+  .trust-card .tc-title {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 1.4em;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+  .trust-card .tc-sub { font-size: 0.95em; color: var(--ink-muted); }
+  .trust-card .tc-pill {
+    font-family: var(--mono);
+    font-size: 0.95em;
+    color: var(--ink-soft);
+    border: 1px solid var(--rule);
+    border-radius: 2em;
+    padding: 0.4em 1em;
+  }
+  .trust-card .tc-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1em;
+    border-top: 1px solid var(--rule);
+    padding-top: 1.25em;
+  }
+  .trust-card .tc-row {
+    display: grid;
+    grid-template-columns: 2.25em 7.5em 1fr auto;
+    align-items: center;
+    gap: 1em;
+  }
+  .trust-card .tc-status {
+    width: 2.25em; height: 2.25em;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .trust-card .tc-status svg { width: 1.25em; height: 1.25em; }
+  .trust-card .tc-status.high { background: var(--band-high-bg); color: var(--band-high-fg); }
+  .trust-card .tc-status.med  { background: var(--band-med-bg);  color: var(--band-med-fg); }
+  .trust-card .tc-status.low  { background: var(--band-low-bg);  color: var(--band-low-fg); }
+  .trust-card .tc-label { display: flex; flex-direction: column; gap: 0.1em; }
+  .trust-card .tc-label .name { font-weight: 700; font-size: 1.1em; }
+  .trust-card .tc-label .count { font-size: 0.85em; color: var(--ink-muted); }
+  .trust-card .tc-track {
+    height: 0.6em;
+    background: #EDEBE6;
+    border-radius: 1em;
+    overflow: hidden;
+  }
+  .trust-card .tc-fill {
+    height: 100%;
+    border-radius: 1em;
+    background: #2C6BD8;            /* the blue used in the source product */
+  }
+  .trust-card .tc-pct {
+    font-weight: 700;
+    font-size: 1.15em;
+    text-align: right;
+    min-width: 2.5em;
+  }
+  .trust-card .tc-pct.high { color: var(--band-high-fg); }
+  .trust-card .tc-pct.med  { color: var(--band-med-fg); }
+  .trust-card .tc-pct.low  { color: var(--band-low-fg); }
+  .trust-card .tc-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 1px solid var(--rule);
+    padding-top: 1.1em;
+  }
+  .trust-card .tc-foot .lbl { color: var(--ink-muted); font-size: 1em; }
+  .trust-card .tc-foot .val { font-weight: 700; font-size: 1.15em; }
+
+  /* ---- Symplify AI Assistant popup (Healthcare / Clinicians) ---- */
+  .assistant-card {
+    font-size: 15px;                 /* scale knob — override per slide */
+    width: 100%;
+    border-radius: 0.85em;
+    overflow: hidden;
+    box-shadow: var(--panel-shadow);
+    border: 1px solid var(--rule);
+    background: var(--panel);
+    font-family: var(--sans);
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+  }
+  .assistant-card .ac-head {
+    background: linear-gradient(135deg, #6D40D9 0%, #8B5CF6 100%);
+    color: #fff;
+    padding: 1em 1.15em;
+    display: flex;
+    align-items: center;
+    gap: 0.75em;
+  }
+  .assistant-card .ac-avatar {
+    flex: 0 0 2em; height: 2em;
+    border-radius: 0.5em;
+    background: rgba(255,255,255,0.18);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .assistant-card .ac-avatar svg { width: 1.15em; height: 1.15em; }
+  .assistant-card .ac-head .ac-id { flex: 1; display: flex; flex-direction: column; line-height: 1.2; }
+  .assistant-card .ac-head .ac-name { font-weight: 600; font-size: 1.05em; }
+  .assistant-card .ac-head .ac-status { font-size: 0.8em; opacity: 0.85; }
+  .assistant-card .ac-head .ac-win { display: flex; gap: 0.6em; opacity: 0.9; font-size: 1.1em; }
+  .assistant-card .ac-body {
+    background: #F4F5F7;
+    padding: 1.15em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+  }
+  .assistant-card .ac-msg { display: flex; gap: 0.6em; align-items: flex-start; }
+  .assistant-card .ac-bot {
+    flex: 0 0 1.75em; height: 1.75em;
+    border-radius: 50%;
+    background: #EDE7FB; color: #6D40D9;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .assistant-card .ac-bot svg { width: 0.95em; height: 0.95em; }
+  .assistant-card .ac-bubble {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 0.6em;
+    padding: 0.85em 1em;
+    font-size: 0.95em;
+    line-height: 1.45;
+    color: var(--ink-soft);
+    max-width: 88%;
+  }
+  .assistant-card .ac-bubble .ac-time {
+    display: block;
+    text-align: right;
+    font-size: 0.78em;
+    color: var(--ink-muted);
+    margin-top: 0.5em;
+  }
+  .assistant-card .ac-tabs {
+    display: flex; gap: 0.5em;
+  }
+  .assistant-card .ac-tab {
+    width: 1.9em; height: 1.9em;
+    border-radius: 0.45em;
+    border: 1px solid var(--rule);
+    background: var(--panel);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-muted);
+  }
+  .assistant-card .ac-tab.active { background: #2C6BD8; border-color: #2C6BD8; color: #fff; }
+  .assistant-card .ac-tab svg { width: 0.95em; height: 0.95em; }
+  .assistant-card .ac-chips {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6em;
+  }
+  .assistant-card .ac-chip {
+    border: 1px solid var(--rule);
+    background: var(--panel);
+    border-radius: 2em;
+    padding: 0.55em 0.9em;
+    font-size: 0.85em;
+    color: var(--ink-soft);
+    display: flex; align-items: center; gap: 0.45em;
+    white-space: nowrap;
+  }
+  .assistant-card .ac-chip svg { width: 0.85em; height: 0.85em; flex: 0 0 auto; color: var(--ink-muted); }
+  .assistant-card .ac-input {
+    display: flex; align-items: center; gap: 0.6em;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 0.6em;
+    padding: 0.6em 0.6em 0.6em 1em;
+  }
+  .assistant-card .ac-input .ph { flex: 1; color: var(--ink-muted); font-size: 0.92em; }
+  .assistant-card .ac-send {
+    flex: 0 0 2.1em; height: 2.1em;
+    border-radius: 0.5em;
+    background: #8B7BD8; color: #fff;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .assistant-card .ac-send svg { width: 1em; height: 1em; }
+  .assistant-card .ac-badge {
+    align-self: flex-end;
+    display: flex; align-items: center; gap: 0.35em;
+    font-size: 0.7em; color: #2E5D8A;
+    opacity: 0.8;
+  }
+  .assistant-card .ac-badge svg { width: 1.1em; height: 1.1em; }
+
+  /* "Before" mock table — slide 6 left column */
+  .mock-table {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 13px;
+    opacity: 0.62;
+    color: var(--ink-soft);
+  }
+  .mock-table .row-tab {
+    display: grid;
+    grid-template-columns: 1.4fr 0.9fr 0.5fr;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .mock-table .row-tab:last-child { border-bottom: 0; }
+  .mock-table .row-tab.header {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    background: var(--bg);
+  }
+  .mock-table .num { text-align: right; }
+
+  /* =========================================================================
+     SLIDE 23 — SEAMFUL REFRAME
+     ========================================================================= */
+  .jd-quote {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-style: italic;
+    font-size: 30px;
+    line-height: 1.36;
+    color: var(--ink-soft);
+    border-left: 3px solid var(--rule);
+    padding-left: 24px;
+  }
+  .strike {
+    text-decoration: line-through;
+    text-decoration-color: var(--strike);
+    text-decoration-thickness: 2px;
+    color: var(--ink-muted);
+  }
+  .replacement {
+    font-style: normal;
+    font-weight: 700;
+    color: var(--accent);
+    margin-left: 6px;
+  }
+
+  /* Wayline sketch — pure CSS rendition for slide 24 (and cropped slide 23) */
+  .sketch {
+    background: #F6F3EC;
+    border: 1.5px solid var(--ink);
+    border-radius: 4px;
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 18px;
+    font-family: var(--sans);
+    color: var(--ink);
+    height: 100%;
+  }
+  .sketch .pane {
+    background: var(--bg);
+    border: 1.5px solid var(--ink);
+    border-radius: 3px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .sketch .pane-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .sketch .transcript-line {
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.5;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .sketch .speaker {
+    font-weight: 700;
+    font-family: var(--sans);
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    flex: 0 0 56px;
+    padding-top: 2px;
+  }
+  .sketch .utterance { flex: 1; }
+  .sketch .conf-inline {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 5px;
+    border: 1.2px solid var(--ink);
+    border-radius: 2px;
+    align-self: center;
+  }
+  .sketch .conf-inline.hi { background: var(--band-high-bg); }
+  .sketch .conf-inline.md { background: var(--band-med-bg); }
+  .sketch .conf-inline.lo { background: var(--band-low-bg); }
+  .sketch .right-col {
+    display: flex; flex-direction: column; gap: 18px;
+  }
+  .sketch .commitment {
+    background: var(--bg);
+    border: 1.5px solid var(--ink);
+    border-radius: 3px;
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+  .sketch .commitment .c-text { font-weight: 500; }
+  .sketch .commitment .c-actions {
+    display: flex; gap: 8px; margin-top: 8px;
+  }
+  .sketch .commitment .c-btn {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 4px 8px;
+    border: 1.2px solid var(--ink);
+    border-radius: 2px;
+    font-weight: 600;
+  }
+  .sketch .audit-line {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-soft);
+    border-top: 1.2px dashed var(--ink);
+    padding-top: 10px;
+  }
+  .sketch .escalate {
+    background: var(--ink);
+    color: var(--bg);
+    text-align: center;
+    padding: 11px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .sketch-annotations {
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    font-size: 10px;
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: lowercase;
+  }
+  .sketch-annotations .ann {
+    border-top: 1px solid var(--accent);
+    padding-top: 6px;
+    line-height: 1.3;
+  }
+
+  /* =========================================================================
+     NAVIGATION CHROME — visible only on the viewer's screen, not the slides
+     ========================================================================= */
+  .nav-chrome {
+    position: fixed;
+    bottom: 18px;
+    right: 22px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(15, 15, 15, 0.85);
+    padding: 8px 14px;
+    border-radius: 28px;
+    color: #ECEAE3;
+    font-family: var(--sans);
+    font-size: 12px;
+    backdrop-filter: blur(8px);
+    transition: opacity 0.3s ease;
+  }
+  .nav-chrome.hidden { opacity: 0; pointer-events: none; }
+  .nav-chrome .counter {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+  .nav-chrome .hint { color: #999591; font-size: 11px; }
+  .nav-chrome button {
+    background: transparent;
+    border: 1px solid #4a4844;
+    color: #ECEAE3;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-chrome button:hover { background: #2a2a2a; }
+
+  /* Presenter mode — invoked with ?presenter=1 — shows a slim timeline */
+  body.presenter .timeline {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    z-index: 101;
+  }
+  body.presenter .timeline-fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.25s ease;
+  }
+  body:not(.presenter) .timeline { display: none; }
+
+  /* Print to PDF — used by Cmd+P export */
+  @media print {
+    @page { size: 1920px 1080px; margin: 0; }
+    body { background: #fff; overflow: visible; height: auto; }
+    .nav-chrome, .timeline { display: none !important; }
+    .stage { position: static; }
+    .slide {
+      display: block !important;
+      page-break-after: always;
+      transform: none !important;
+      width: 1920px;
+      height: 1080px;
+    }
+    .slide:last-child { page-break-after: auto; }
+  }
+</style>
+</head>
+<body>
+<div class="timeline"><div class="timeline-fill" id="timelineFill"></div></div>
+
+<div class="stage" id="stage">
+
+  <!-- =====================================================================
+       SLIDE 1 — TITLE
+       Anchor slide. Editorial register. Heading top-third, empty lower 2/3.
+       Script pairing: 0:00–1:30
+       ===================================================================== -->
+  <section class="slide" data-slide="1">
+    <div class="slide-inner">
+      <div style="height: 170px;"></div>
+      <h1 class="display-xl left-anchor">The trust surface between a&nbsp;professional and an AI.</h1>
+      <div style="margin-top: 48px;" class="metadata">
+        Sean Smith &nbsp;·&nbsp; Founding Product Designer Candidate &nbsp;·&nbsp; Wayline &nbsp;·&nbsp; May&nbsp;20,&nbsp;2026
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SLIDE 2 — AGENDA
+       Three-column pattern (first appearance — establishes the spine).
+       Script pairing: 0:30–1:30
+       ===================================================================== -->
+  <section class="slide slide--top-anchor" data-slide="2">
+    <div class="slide-inner">
+      <h2 class="display-l">The next 30&nbsp;minutes.</h2>
+      <div class="spacer"></div>
+      <div class="row-3" style="margin-bottom: 8%;">
+        <div class="stack-tight">
+          <div class="label-overline">01</div>
+          <div class="display-s">Computis</div>
+          <div class="body-m">Crypto tax automation. CPAs. Regulated finance.</div>
+        </div>
+        <div class="stack-tight">
+          <div class="label-overline">02</div>
+          <div class="display-s">Symplify</div>
+          <div class="body-m">Hospital operations. Clinicians. HIPAA.</div>
+        </div>
+        <div class="stack-tight">
+          <div class="label-overline">03</div>
+          <div class="display-s">Wayline</div>
+          <div class="body-m">Property management. Property managers. Voice agents.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SLIDE 3 — COMPUTIS: THE ROOM
+       Stakes slide. All-type pattern. Heading upper-third, empty below.
+       Script pairing: 1:30–2:30
+       ===================================================================== -->
+  <section class="slide" data-slide="3">
+    <div class="slide-inner">
+      <div style="height: 170px;"></div>
+      <div class="display-xl left-anchor">11:00&nbsp;PM. April&nbsp;14th.</div>
+      <div style="margin-top: 36px;" class="body-l left-anchor">
+        47 client wallets. 200,000+ transactions. One deadline that doesn't move.
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SLIDE 4 — COMPUTIS: THE BUSINESS PROBLEM
+       Stakes slide. Pattern lock with slide 3.
+       Script pairing: 2:30–3:15
+       ===================================================================== -->
+  <section class="slide" data-slide="4">
+    <div class="slide-inner">
+      <div style="height: 170px;"></div>
+      <div class="display-xl left-anchor">32% demo-to-customer conversion gap.</div>
+      <div style="margin-top: 36px;" class="body-l left-anchor">
+        Prospects loved the demo. Half of them signed. The CPAs who onboarded ghosted in week&nbsp;two.
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SLIDE 5 — COMPUTIS: STAKES
+       First slide to use the accent color (small labels only).
+       Script pairing: 3:15–4:00
+       ===================================================================== -->
+  <section class="slide slide--top-anchor" data-slide="5">
+    <div class="slide-inner">
+      <h2 class="display-l">Three stakes.</h2>
+      <div class="spacer"></div>
+      <div class="stack-loose" style="margin-bottom: 6%;">
+        <div class="stack-tight">
+          <div class="label-overline">Regulatory</div>
+          <div class="display-s">A wrong classification is an IRS audit. The CPA's PTIN is on the return.</div>
+        </div>
+        <div class="stack-tight">
+          <div class="label-overline">Commercial</div>
+          <div class="display-s">Every churned CPA was a firm-sized account.</div>
+        </div>
+        <div class="stack-tight">
+          <div class="label-overline">Engineering</div>
+          <div class="display-s">The team was rebuilding the model every two months. Precision wasn't moving adoption.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SLIDE 6 — COMPUTIS: THE LOAD-BEARING DECISION (ANCHOR)
+       Two-column before/after. The slide that plants the trust-surface frame.
+       Script pairing: 4:00–6:00
+       ===================================================================== -->
+  <section class="slide slide--top-anchor" data-slide="6">
+    <div class="slide-inner">
+      <div class="title-block">
+        <h2 class="display-m" style="max-width: 70%;">From a percentage to a decision.</h2>
+        <div class="body-m" style="max-width: 70%; color: var(--ink-muted);">
+          The Computis classification surface — confidence as decision-routing.
+        </div>
+      </div>
+      <div class="spacer"></div>
+      <div class="row" style="margin-bottom: 4%; align-items: stretch; min-height: 620px; grid-template-columns: 1fr 1.15fr; display: grid; gap: 6%;">
+        <div class="stack-tight" style="display: flex; flex-direction: column;">
+          <div class="label-overline">Before — raw confidence scores</div>
+          <div class="mock-table" style="margin-top: 12px; font-size: 15px;">
+            <div class="row-tab header"><div>TRANSACTION</div><div>CLASSIFICATION</div><div class="num">CONF.</div></div>
+            <div class="row-tab"><div>BTC → ETH swap</div><div>Trade</div><div class="num">0.82</div></div>
+            <div class="row-tab"><div>USDC inbound</div><div>Income</div><div class="num">0.67</div></div>
+            <div class="row-tab"><div>Wallet transfer</div><div>Non-taxable</div><div class="num">0.91</div></div>
+            <div class="row-tab"><div>Staking reward</div><div>Income</div><div class="num">0.43</div></div>
+            <div class="row-tab"><div>NFT acquisition</div><div>Investment</div><div class="num">0.71</div></div>
+          </div>
+          <div class="body-s" style="margin-top: 14px; font-style: italic;">
+            What did 0.67 mean in dollars at risk? She invented her own threshold. So did everyone else.
+          </div>
+        </div>
+        <div class="stack-tight" style="display: flex; flex-direction: column;">
+          <div class="label-overline">After — confidence-banded decisions</div>
+          <div class="asset-frame" style="aspect-ratio: 3352 / 2004; width: 100%; margin-top: 12px; background: transparent; box-shadow: none; border: none;">
+            <img src="./assets/computis-classification-insights.png" alt="Computis classification insights panel" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+            <div class="placeholder">
+              <div class="ph-label">Asset placeholder</div>
+              <div class="ph-file">computis-classification-insights.png</div>
+              <div class="ph-source">Source: computis-app/client/components/transactions/classification-insights.tsx — live render at projection scale</div>
+              <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 320px; margin-top: 8px;">
+                <div class="conf-tile high"><span class="dot"></span><span class="label-name">High Confidence</span><span class="label-count">61 · 55%</span></div>
+                <div class="conf-tile med"><span class="dot"></span><span class="label-name">Medium Confidence</span><span class="label-count">42 · 34%</span></div>
+                <div class="conf-tile low"><span class="dot"></span><span class="label-name">Low Confidence</span><span class="label-count">14 · 11%</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="body-s italic" style="text-align: center; color: var(--ink-muted);">
+        Same data. The model still computes the percentage. The surface translates it into three decisions: accept in bulk, review individually, escalate.
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SLIDE 7 — COMPUTIS: RULE ENGINE
+       Body-text-plus-screenshot pattern (first appearance).
+       Script pairing: 6:00–7:00
+       ===================================================================== -->
+  <section class="slide slide--asset-led slide--top-anchor" data-slide="7">
+    <div class="slide-inner">
+      <div class="title-block">
+        <h2 class="display-m" style="max-width: 80%;">Override is the failure mode.</h2>
+        <div class="body-l" style="max-width: 70%;">
+          Bulk-edit entrenches distrust. A rule engine turns every override into permanent training signal the CPA can see and audit.
+        </div>
+      </div>
+      <!-- FULL-BLEED:ON — moderate breakout per asset-frame--motion spec (108% width / -4% margin-left).
+           TO REVERT: replace this div's style with the line on the next comment, and delete these two comment lines.
+           REVERT STYLE: aspect-ratio: 1920 / 1156; max-height: 85%; max-width: 100%; margin: 20px auto 0; -->
+      <div class="asset-frame asset-frame--motion" style="aspect-ratio: 1920 / 1156; max-height: 85%; width: 108%; margin: 20px 0 0 -4%;">
+        <video
+          src="./assets/computis-rule-engine.mp4"
+          autoplay muted loop playsinline preload="auto"
+          poster="./assets/computis-rule-engine.png"
+          onloadeddata="this.nextElementSibling.classList.add('is-loaded')"
+          onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')">
+        </video>
+        <div class="placeholder">
+          <div class="ph-label">Asset placeholder · motion</div>
+          <div class="ph-file">computis-rule-engine.mp4</div>
+          <div class="ph-source">Source: rule-authoring flow capture from the Computis rule-engine module. ~10s loop, no audio, native 1920×1156. Static PNG fallback: computis-rule-engine.png</div>
+        </div>
+      </div>
+      <div class="spacer"></div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SLIDE 8 — COMPUTIS: ANOMALY ROUTE
+       Pattern lock with slide 7.
+       Script pairing: 7:00–8:00
+       ===================================================================== -->
+  <section class="slide slide--asset-led slide--top-anchor" data-slide="8">
+    <div class="slide-inner">
+      <div class="title-block">
+        <h2 class="display-m" style="max-width: 86%;">If it recurs, it needs a noun in the URL.</h2>
+        <div class="body-l" style="max-width: 70%;">
+          Anomalies were toast notifications. They were invisible by Tuesday. Now they're a routed triage queue.
+        </div>
+      </div>
+      <div class="asset-frame" style="aspect-ratio: 8000 / 5000; max-height: 80%; max-width: 100%; margin: 20px auto 0; border: none; background: transparent; box-shadow: none;">
+        <img src="./assets/computis-anomaly-route.png" alt="Computis anomaly detection page" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+        <div class="placeholder">
+          <div class="ph-label">Asset placeholder</div>
+          <div class="ph-file">computis-anomaly-route.png</div>
+          <div class="ph-source">Source: computis-app/client/components/data-anomaly-detection/ — table view with priority, status, affected-transactions columns visible</div>
+        </div>
+      </div>
+      <div class="spacer"></div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SLIDE 9 — COMPUTIS: THE HONEST MISS
+       Self-audit beat, native scorecard. Score is the hero (top-right);
+       two-column honesty split below — "what I found" vs "what held up".
+       No screenshot: rebuilt in deck tokens for crisp projection.
+       Script pairing: 8:00–9:30
+       ===================================================================== -->
+  <section class="slide slide--top-anchor" data-slide="9">
+    <div class="slide-inner">
+      <!-- Header row: title + subtitle on the left, score as the visual hero on the right -->
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 6%; margin-bottom: 4.5%;">
+        <div>
+          <h2 class="display-m" style="margin: 0;">I shipped this. Then I audited myself.</h2>
+          <div class="metadata" style="margin-top: 16px;">Dated, public, in the repo — not a tidied-up retro.</div>
+        </div>
+        <div style="text-align: right; flex-shrink: 0;">
+          <div style="font-family: var(--serif); font-weight: 600; font-size: 104px; line-height: 0.88; letter-spacing: -0.022em; color: var(--accent);">68<span style="font-family: var(--sans); font-weight: 400; font-size: 34px; letter-spacing: 0; color: var(--ink-muted);">/100</span></div>
+          <div class="metadata" style="letter-spacing: 0.12em; text-transform: uppercase; font-size: 13px; margin-top: 6px;">Audit score</div>
+        </div>
+      </div>
+
+      <!-- Two-column honesty split: what broke / what held -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4.5%; flex: 1; min-height: 0;">
+
+        <!-- What I found (the misses) -->
+        <div style="display: flex; flex-direction: column;">
+          <div class="label-overline" style="color: var(--band-low-fg); display: flex; align-items: center; gap: 14px; margin-bottom: 26px;">
+            <span style="width: 16px; height: 16px; border-radius: 50%; background: var(--strike); display: inline-block;"></span>What I found
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 20px;">
+            <div style="background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 22px 26px; box-shadow: var(--panel-shadow);">
+              <div style="font-family: var(--sans); font-weight: 500; font-size: 25px; line-height: 1.25; color: var(--ink);">40% of components bypass tokens</div>
+              <div class="body-s" style="font-size: 19px; margin-top: 7px;">~30 hardcoded color instances</div>
+            </div>
+            <div style="background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 22px 26px; box-shadow: var(--panel-shadow);">
+              <div style="font-family: var(--sans); font-weight: 500; font-size: 25px; line-height: 1.25; color: var(--ink);">Duplicate <span style="font-family: var(--mono); font-size: 0.82em;">Button</span> components</div>
+              <div class="body-s" style="font-size: 19px; margin-top: 7px;">Core vs. “enhanced” — consumer confusion</div>
+            </div>
+            <div style="background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 22px 26px; box-shadow: var(--panel-shadow);">
+              <div style="font-family: var(--sans); font-weight: 500; font-size: 25px; line-height: 1.25; color: var(--ink);">Two toast systems at once</div>
+              <div class="body-s" style="font-size: 19px; margin-top: 7px;">Plus one hex repeated across nine files</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- What held up (the genuine strengths) -->
+        <div style="display: flex; flex-direction: column;">
+          <div class="label-overline" style="color: var(--band-high-fg); display: flex; align-items: center; gap: 14px; margin-bottom: 26px;">
+            <span style="width: 16px; height: 16px; border-radius: 50%; background: var(--accent); display: inline-block;"></span>What held up
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 20px;">
+            <div style="background: var(--accent-soft); border-radius: 8px; padding: 22px 26px;">
+              <div style="font-family: var(--sans); font-weight: 500; font-size: 25px; line-height: 1.25; color: var(--ink);">Token architecture is sound</div>
+              <div class="body-s" style="font-size: 19px; margin-top: 7px; color: var(--ink-soft);">CSS vars → Tailwind → CVA</div>
+            </div>
+            <div style="background: var(--accent-soft); border-radius: 8px; padding: 22px 26px;">
+              <div style="font-family: var(--sans); font-weight: 500; font-size: 25px; line-height: 1.25; color: var(--ink);">Naming 100% consistent</div>
+              <div class="body-s" style="font-size: 19px; margin-top: 7px; color: var(--ink-soft);">Typography scale: zero drift</div>
+            </div>
+            <div style="background: var(--accent-soft); border-radius: 8px; padding: 22px 26px;">
+              <div style="font-family: var(--sans); font-weight: 500; font-size: 25px; line-height: 1.25; color: var(--ink);">Accessibility primitives solid</div>
+              <div class="body-s" style="font-size: 19px; margin-top: 7px; color: var(--ink-soft);">Radix · focus-visible · reduced-motion</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SLIDE 10 — COMPUTIS: OUTCOMES OVERVIEW (ANCHOR)
+       Four large numbers. Restraint is the visual argument.
+       Script pairing: 9:30–10:00
+       ===================================================================== -->
+  <section class="slide slide--top-anchor" data-slide="10">
+    <div class="slide-inner">
+      <h2 class="display-m">Measured, not asserted.</h2>
+      <div class="spacer"></div>
+      <div class="row-4" style="margin-bottom: 10%;">
+        <div>
+          <div class="number-display">40<span style="font-size: 64px; font-weight: 500; color: var(--ink-soft); vertical-align: super; line-height: 1;">%</span></div>
+          <div class="number-caption">reduction in accounting processing time</div>
+        </div>
+        <div>
+          <div class="number-display">45<span style="font-size: 64px; font-weight: 500; color: var(--ink-soft); vertical-align: super; line-height: 1;">%</span></div>
+          <div class="number-caption">reduction in CPA onboarding time</div>
+        </div>
+        <div>
+          <div class="number-display">32<span style="font-size: 64px; font-weight: 500; color: var(--ink-soft); vertical-align: super; line-height: 1;">%</span></div>
+          <div class="number-caption">increase in demo-to-customer conversion</div>
+        </div>
+        <div>
+          <div class="number-display">85<span style="font-size: 64px; font-weight: 500; color: var(--ink-soft); vertical-align: super; line-height: 1;">%</span></div>
+          <div class="number-caption">reduction in engineering dependency</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SLIDE 11 — COMPUTIS: OUTCOMES DETAIL 40% / 45% (ANCHOR)
+       Methodology pairing. Pre-empts the C1 objection visually.
+       Script pairing: 10:00–10:45
+       ===================================================================== -->
+  <section class="slide slide--top-anchor" data-slide="11">
+    <div class="slide-inner">
+      <h2 class="display-m">How we measured.</h2>
+      <div class="spacer"></div>
+      <div class="row" style="margin-bottom: 8%; gap: 9%; align-items: flex-start;">
+        <div class="stack-tight">
+          <div class="display-s"><span style="font-size: 1.4em;">40%</span> reduction</div>
+          <div class="label-overline" style="margin-top: 12px;">Accounting processing time</div>
+          <div class="body-m" style="margin-top: 8px;">
+            Median time from wallet-ingest to filed-classification, sampled across 6 onboarded firms over a 6-week post-launch window.
+          </div>
+        </div>
+        <div class="stack-tight">
+          <div class="display-s"><span style="font-size: 1.4em;">45%</span> reduction</div>
+          <div class="label-overline" style="margin-top: 12px;">CPA onboarding time</div>
+          <div class="body-m" style="margin-top: 8px;">
+            Time from credential-issue to first-completed-classification task. Same 6-firm cohort.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SLIDE 12 — COMPUTIS: OUTCOMES DETAIL 32% / 85% (ANCHOR)
+       The "most attackable" line carries the C1 preemption.
+       Script pairing: 10:45–11:30
+       ===================================================================== -->
+  <section class="slide slide--top-anchor" data-slide="12">
+    <div class="slide-inner">
+      <h2 class="display-m">How we measured (continued).</h2>
+      <div class="spacer"></div>
+      <div class="row" style="margin-bottom: 8%; gap: 9%; align-items: flex-start;">
+        <div class="stack-tight">
+          <div class="display-s"><span style="font-size: 1.4em;">32%</span> increase</div>
+          <div class="label-overline" style="margin-top: 12px;">Demo-to-customer conversion</div>
+          <div class="body-m" style="margin-top: 8px;">
+            Sales pipeline data, quarter-over-quarter post-redesign. The conversion gap from slide 4, closed.
+          </div>
+        </div>
+        <div class="stack-tight">
+          <div class="display-s"><span style="font-size: 1.4em;">85%</span> reduction</div>
+          <div class="label-overline" style="margin-top: 12px;">Engineering dependency</div>
+          <div class="body-m" style="margin-top: 8px;">
+            Design clarification tickets reopened post-handoff, before versus after the v2 component spec. <em>The most attackable of the four — and the one I'm happiest to be pressed on.</em>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SLIDE 13 — COMPUTIS: REPO-AS-RECEIPT
+       Figma-to-code split. The "I write the React" beat.
+       Script pairing: 11:30–12:15
+       ===================================================================== -->
+  <section class="slide slide--top-anchor" data-slide="13">
+    <div class="slide-inner">
+      <div class="title-block">
+        <h2 class="display-m">I write the React.</h2>
+        <div class="body-l" style="max-width: 78%;">
+          49 components on Radix primitives — the design system and the code that renders it are both mine. Same source data, two representations.
+        </div>
+      </div>
+      <div class="row" style="flex: 1; min-height: 0; margin-top: 64px; margin-bottom: 4%; align-items: center; display: grid; grid-template-columns: 1.32fr 1fr; gap: 54px;">
+
+        <div style="display: flex; flex-direction: column;">
+          <div class="label-overline" style="display: flex; align-items: center; gap: 14px; margin-bottom: 22px;">
+            <span style="width: 14px; height: 14px; border-radius: 50%; background: var(--accent); display: inline-block;"></span>Figma — what the user sees
+          </div>
+          <div class="asset-frame" style="background: var(--panel); border: 1px solid var(--rule); box-shadow: var(--panel-shadow); border-radius: 14px; padding: 40px 44px; display: block;">
+            <img src="./assets/figma-classification-insights-clean.png" alt="Figma render of the classification-insights confidence panel — High, Medium, Low bands with counts and Review actions" style="width: 100%; height: auto; object-fit: contain; display: block;" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+            <div class="placeholder" style="position: static; min-height: 360px;">
+              <div class="ph-label">Asset placeholder</div>
+              <div class="ph-file">figma-classification-insights-clean.png</div>
+              <div class="ph-source">Run build-slide13-assets.py to generate this (border-cropped from figma-classification-insights.png).</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column;">
+          <div class="label-overline" style="color: var(--ink-muted); display: flex; align-items: center; gap: 14px; margin-bottom: 22px;">
+            <span style="width: 14px; height: 14px; border-radius: 50%; background: var(--ink-muted); display: inline-block;"></span>React — the code I wrote
+          </div>
+          <div class="asset-frame asset-frame--motion" style="border-radius: 14px; display: block; overflow: visible;">
+            <img src="./assets/code-classification-insights-dark.png" alt="classification-insights.tsx — the classificationData array and the render JSX that maps it to Progress bars and Review buttons" style="width: 100%; height: auto; object-fit: contain; display: block; border-radius: 14px; box-shadow: 0 14px 50px rgba(22,21,19,0.18);" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+            <div class="placeholder" style="position: static; min-height: 360px;">
+              <div class="ph-label">Asset placeholder</div>
+              <div class="ph-file">code-classification-insights-dark.png</div>
+              <div class="ph-source">Run build-slide13-assets.py to generate this dark-theme render of classification-insights.tsx.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SLIDE 14 — TRANSITION: THE THROUGH-LINE (FIRST SHOWING)
+       Same composition as slide 22, forward-pointing heading.
+       Script pairing: 12:15–14:30
+       ===================================================================== -->
+  <section class="slide" data-slide="14">
+    <div class="slide-inner">
+      <h2 class="display-m" style="text-align: center; max-width: 100%;">Same primitive. New vertical.</h2>
+      <div class="body-m" style="text-align: center; margin-top: 8px; color: var(--ink-muted);">
+        The Computis trust surface — and the Symplify one.
+      </div>
+      <div class="spacer"></div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6%; align-items: center; margin-bottom: 6%; min-height: 720px;">
+        <div class="stack-tight" style="display: flex; flex-direction: column;">
+          <div class="label-overline" style="text-align: center;">Computis &nbsp;·&nbsp; Finance</div>
+          <div style="margin-top: 16px; display: flex; justify-content: center;">
+            <div class="trust-card" style="font-size: 18px;">
+              <div class="tc-head">
+                <div class="tc-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9l-4.6 1.9L12 15l-1.9-4.1L5.5 9l4.6-1.4L12 3z"/><path d="M19 14l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2z"/></svg>
+                </div>
+                <div class="tc-titles">
+                  <div class="tc-title">AI Classification</div>
+                  <div class="tc-sub">Confidence distribution</div>
+                </div>
+                <div class="tc-pill">117</div>
+              </div>
+              <div class="tc-rows">
+                <div class="tc-row">
+                  <div class="tc-status high"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></div>
+                  <div class="tc-label"><span class="name">High</span><span class="count">61 txns</span></div>
+                  <div class="tc-track"><div class="tc-fill" style="width: 55%;"></div></div>
+                  <div class="tc-pct high">55%</div>
+                </div>
+                <div class="tc-row">
+                  <div class="tc-status med"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/></svg></div>
+                  <div class="tc-label"><span class="name">Medium</span><span class="count">42 txns</span></div>
+                  <div class="tc-track"><div class="tc-fill" style="width: 34%;"></div></div>
+                  <div class="tc-pct med">34%</div>
+                </div>
+                <div class="tc-row">
+                  <div class="tc-status low"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg></div>
+                  <div class="tc-label"><span class="name">Low</span><span class="count">14 txns</span></div>
+                  <div class="tc-track"><div class="tc-fill" style="width: 11%;"></div></div>
+                  <div class="tc-pct low">11%</div>
+                </div>
+              </div>
+              <div class="tc-foot">
+                <span class="lbl">Total Classified</span>
+                <span class="val">117 transactions</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="stack-tight" style="display: flex; flex-direction: column;">
+          <div class="label-overline" style="text-align: center;">Symplify &nbsp;·&nbsp; Healthcare</div>
+          <div style="margin-top: 16px; display: flex; justify-content: center;">
+            <div class="assistant-card" style="font-size: 16px; max-width: 420px;">
+              <div class="ac-head">
+                <div class="ac-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="11" rx="2.5"/><path d="M12 8V5M12 5a1.4 1.4 0 100-2.8A1.4 1.4 0 0012 5z"/><circle cx="9" cy="13" r="1.1" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r="1.1" fill="currentColor" stroke="none"/></svg></div>
+                <div class="ac-id"><span class="ac-name">AI Assistant</span><span class="ac-status">Online</span></div>
+                <div class="ac-win"><span>&minus;</span><span>&times;</span></div>
+              </div>
+              <div class="ac-body">
+                <div class="ac-msg">
+                  <div class="ac-bot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="11" rx="2.5"/><path d="M12 8V5"/><circle cx="9" cy="13" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r="1" fill="currentColor" stroke="none"/></svg></div>
+                  <div class="ac-bubble">Hello Jimmy Anderson! I&rsquo;m your AI Assistant for Symplify. I can help with scheduling, drug interaction checks, triage assessments, clinical alerts, shift handoffs, and more. How can I assist you today?<span class="ac-time">07:05 PM</span></div>
+                </div>
+                <div class="ac-tabs">
+                  <div class="ac-tab active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-3 3a3 3 0 004 4l1-1"/><path d="M15 18l3-3a3 3 0 00-4-4l-1 1"/></svg></div>
+                  <div class="ac-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5 5.5.5-4 3.7 1.2 5.3L12 20l-5.2 2.8L8 16.2 4 12.5 9.5 12 12 3z"/></svg></div>
+                  <div class="ac-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></svg></div>
+                  <div class="ac-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 000 18M12 3a14 14 0 010 18"/></svg></div>
+                </div>
+                <div class="ac-chips">
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-3 3a3 3 0 004 4l1-1"/><path d="M15 18l3-3a3 3 0 00-4-4l-1 1"/></svg>Drug Interaction Check</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a2 2 0 012-2h14a2 2 0 012 2v6M3 14h18M6 10V7a1 1 0 011-1h4v4"/></svg>Bed Availability</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 9h16M8 3v4M16 3v4"/></svg>Schedule Appointment</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0112 0M16 11l2 2 4-4"/></svg>Staff Schedule</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg>Compliance Status</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Pending Approvals</div>
+                </div>
+                <div class="ac-input">
+                  <span class="ph">Type your message...</span>
+                  <div class="ac-send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></div>
+                </div>
+                <div class="ac-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6l8-3z"/></svg>HIPAA Compliant</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SLIDE 15 — SYMPLIFY: OPENING / ONE-LINER
+       Stakes slide. Pattern lock with slides 3, 4.
+       Script pairing: 14:30–15:30
+       ===================================================================== -->
+  <section class="slide" data-slide="15">
+    <div class="slide-inner">
+      <div style="height: 170px;"></div>
+      <div class="display-xl left-anchor">06:45.</div>
+      <div style="margin-top: 36px;" class="body-l left-anchor">
+        Fifteen minutes from end-of-shift. Eight patients to hand off. The legacy workflow is a verbal walk-and-talk and a Word&nbsp;doc.
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SLIDE 16 — SYMPLIFY: WHAT WAS REAL, WHAT WAS MOCKED
+       Two-column symmetry. The preemption beat.
+       Script pairing: 15:30–16:30
+       ===================================================================== -->
+  <section class="slide slide--top-anchor" data-slide="16">
+    <div class="slide-inner">
+      <h2 class="display-m">What was real. What was mocked. Why it didn't matter for design.</h2>
+      <div class="spacer"></div>
+      <div class="row" style="margin-bottom: 8%; gap: 9%; align-items: flex-start;">
+        <div class="stack-tight">
+          <div class="label-overline">Real</div>
+          <div class="display-s" style="margin-top: 14px;">The design problem.</div>
+          <div class="body-m" style="margin-top: 14px;">
+            Confidence-distribution testing. Production-grade component architecture. Role-aware routing. Fourteen deployed surfaces.
+          </div>
+        </div>
+        <div class="stack-tight">
+          <div class="label-overline">Mocked</div>
+          <div class="display-s" style="margin-top: 14px;">Model inference.</div>
+          <div class="body-m" style="margin-top: 14px;">
+            Simulated latency. Seeded confidence distributions across High / Medium / Low bands. Real-model integration scoped post-handoff.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SLIDE 17 — SYMPLIFY: THE SUPERVISION PRIMITIVE (ANCHOR)
+       Constellation composition: central artifact + 3 peripheral satellites.
+       Script pairing: 16:30–18:30
+       ===================================================================== -->
+  <section class="slide slide--asset-led slide--top-anchor" data-slide="17">
+    <div class="slide-inner">
+      <div class="title-block">
+        <h2 class="display-m" style="max-width: 75%;">The same primitive — across fourteen features.</h2>
+        <div class="body-m" style="max-width: 75%; color: var(--ink-muted);">
+          Confidence belongs on the output, not on the feature page.
+        </div>
+      </div>
+      <div class="spacer"></div>
+      <div style="display: grid; grid-template-columns: 1fr 2.2fr 1fr; grid-template-rows: 1fr 1fr; gap: 32px; min-height: 800px; margin-bottom: 4%; align-items: stretch;">
+        <!-- Peripheral 1 -->
+        <div class="asset-frame" style="grid-column: 1; grid-row: 1; opacity: 0.9;">
+          <img src="./assets/symplify-triage-badge.png" alt="Triage Priority Badge" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+          <div class="placeholder">
+            <div class="ph-label">Peripheral</div>
+            <div class="ph-file">symplify-triage-badge.png</div>
+            <div class="ph-source" style="font-size: 11px;">TriagePriorityBadge</div>
+          </div>
+        </div>
+        <!-- Central artifact -->
+        <div class="asset-frame" style="grid-column: 2; grid-row: 1 / span 2;">
+          <img src="./assets/symplify-ai-assistant-popup-large.png" alt="AI Assistant Popup with confidence indicator and HIPAA badge" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+          <div class="placeholder">
+            <div class="ph-label">Hero asset</div>
+            <div class="ph-file">symplify-ai-assistant-popup-large.png</div>
+            <div class="ph-source">Source: Symplify-1.7.4/src/feature-module/components/ai/ — full AIAssistantPopup at high fidelity, ConfidenceIndicator and HIPAABadge clearly visible</div>
+          </div>
+        </div>
+        <!-- Peripheral 2 -->
+        <div class="asset-frame" style="grid-column: 3; grid-row: 1; opacity: 0.9;">
+          <img src="./assets/symplify-severity-badge.png" alt="Severity Badge" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+          <div class="placeholder">
+            <div class="ph-label">Peripheral</div>
+            <div class="ph-file">symplify-severity-badge.png</div>
+            <div class="ph-source" style="font-size: 11px;">Drug interaction SeverityBadge</div>
+          </div>
+        </div>
+        <!-- Peripheral 3 -->
+        <div class="asset-frame" style="grid-column: 1; grid-row: 2; opacity: 0.9;">
+          <img src="./assets/symplify-urgency-indicator.png" alt="Message Urgency Indicator" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+          <div class="placeholder">
+            <div class="ph-label">Peripheral</div>
+            <div class="ph-file">symplify-urgency-indicator.png</div>
+            <div class="ph-source" style="font-size: 11px;">MessageUrgencyIndicator</div>
+          </div>
+        </div>
+        <!-- Peripheral 4 -->
+        <div class="asset-frame" style="grid-column: 3; grid-row: 2; opacity: 0.9;">
+          <img src="./assets/symplify-confidence-indicator.png" alt="Confidence Indicator" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+          <div class="placeholder">
+            <div class="ph-label">Peripheral</div>
+            <div class="ph-file">symplify-confidence-indicator.png</div>
+            <div class="ph-source" style="font-size: 11px;">ConfidenceIndicator in another surface</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SLIDE 18 — SYMPLIFY: VOICE AS INPUT MODALITY (ANCHOR)
+       The Wayline-adjacent slide. Clinical specificity is the move.
+       Script pairing: 18:30–20:30
+       ===================================================================== -->
+  <section class="slide slide--asset-led slide--top-anchor" data-slide="18">
+    <div class="slide-inner">
+      <div class="title-block">
+        <h2 class="display-m">Input isn&rsquo;t typed. It&rsquo;s inferred.</h2>
+        <div class="body-m" style="max-width: 70%; color: var(--ink-muted);">
+          The clinician&rsquo;s job is to confirm what the system already extracted.
+        </div>
+      </div>
+      <div class="spacer"></div>
+      <div class="asset-frame" style="height: 72%; margin-bottom: 4%;">
+        <img
+          src="./assets/symplify-patient-acuity.png"
+          alt="Symplify patient acuity dashboard with four acuity bands, patient rows, and trend sparklines"
+          onload="this.nextElementSibling.classList.add('is-loaded')"
+          onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
+        <div class="placeholder">
+          <div class="ph-label">Asset placeholder</div>
+          <div class="ph-file">symplify-patient-acuity.png</div>
+          <div class="ph-source">
+            Source: Symplify-1.7.4/src/feature-module/components/pages/ai-modules/patient-acuity/patientAcuity.tsx.
+            <strong>Capture requirements:</strong>
+            (a) acuity distribution by unit visible at top;
+            (b) at least 6 patient rows showing all four acuity bands (critical / high / moderate / stable);
+            (c) at least one trend sparkline visible per row;
+            (d) filter chips at top with acuity color dots.
+            Do not desaturate &mdash; ACUITY_COLORS tokens are doing the chromatic work.
+            Patient names / room numbers / diagnoses (Septic Shock, ARDS &mdash; Ventilated, STEMI &mdash; Post PCI)
+            should remain legible in the capture.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================================
+       SLIDE 20 — SYMPLIFY: OUTCOMES
+       Three lines, generous white space. The deliberate-breath slide.
+       Script pairing: 22:00–23:30
+       ===================================================================== -->
+  <section class="slide slide--top-anchor" data-slide="20">
+    <div class="slide-inner">
+      <h2 class="display-m">Three artifacts.</h2>
+      <div class="spacer"></div>
+      <div class="stack-spoken" style="text-align: center; margin-bottom: 12%;">
+        <div class="display-l">14 shipped AI features.</div>
+        <div class="display-l">Confidence threshold slider primitive.</div>
+        <div class="display-l">SBAR shift handoff.</div>
+      </div>
+      <div class="spacer"></div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SLIDE 21 — TRANSITION: THE THROUGH-LINE (SECOND SHOWING)
+       Same composition as slide 14, compounding heading.
+       Script pairing: 23:30–24:30
+       ===================================================================== -->
+  <section class="slide" data-slide="21">
+    <div class="slide-inner">
+      <h2 class="display-m" style="text-align: center; max-width: 100%;">Same primitive. Two regulated verticals.</h2>
+      <div class="spacer"></div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6%; align-items: center; margin-bottom: 6%; min-height: 720px;">
+        <div class="stack-tight" style="display: flex; flex-direction: column;">
+          <div class="label-overline" style="text-align: center;">Computis &nbsp;·&nbsp; Finance &nbsp;·&nbsp; CPAs</div>
+          <div style="margin-top: 16px; display: flex; justify-content: center;">
+            <div class="trust-card" style="font-size: 18px;">
+              <div class="tc-head">
+                <div class="tc-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9l-4.6 1.9L12 15l-1.9-4.1L5.5 9l4.6-1.4L12 3z"/><path d="M19 14l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2z"/></svg>
+                </div>
+                <div class="tc-titles">
+                  <div class="tc-title">AI Classification</div>
+                  <div class="tc-sub">Confidence distribution</div>
+                </div>
+                <div class="tc-pill">117</div>
+              </div>
+              <div class="tc-rows">
+                <div class="tc-row">
+                  <div class="tc-status high"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></div>
+                  <div class="tc-label"><span class="name">High</span><span class="count">61 txns</span></div>
+                  <div class="tc-track"><div class="tc-fill" style="width: 55%;"></div></div>
+                  <div class="tc-pct high">55%</div>
+                </div>
+                <div class="tc-row">
+                  <div class="tc-status med"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/></svg></div>
+                  <div class="tc-label"><span class="name">Medium</span><span class="count">42 txns</span></div>
+                  <div class="tc-track"><div class="tc-fill" style="width: 34%;"></div></div>
+                  <div class="tc-pct med">34%</div>
+                </div>
+                <div class="tc-row">
+                  <div class="tc-status low"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg></div>
+                  <div class="tc-label"><span class="name">Low</span><span class="count">14 txns</span></div>
+                  <div class="tc-track"><div class="tc-fill" style="width: 11%;"></div></div>
+                  <div class="tc-pct low">11%</div>
+                </div>
+              </div>
+              <div class="tc-foot">
+                <span class="lbl">Total Classified</span>
+                <span class="val">117 transactions</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="stack-tight" style="display: flex; flex-direction: column;">
+          <div class="label-overline" style="text-align: center;">Symplify &nbsp;·&nbsp; Healthcare &nbsp;·&nbsp; Clinicians</div>
+          <div style="margin-top: 16px; display: flex; justify-content: center;">
+            <div class="assistant-card" style="font-size: 16px; max-width: 420px;">
+              <div class="ac-head">
+                <div class="ac-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="11" rx="2.5"/><path d="M12 8V5M12 5a1.4 1.4 0 100-2.8A1.4 1.4 0 0012 5z"/><circle cx="9" cy="13" r="1.1" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r="1.1" fill="currentColor" stroke="none"/></svg></div>
+                <div class="ac-id"><span class="ac-name">AI Assistant</span><span class="ac-status">Online</span></div>
+                <div class="ac-win"><span>&minus;</span><span>&times;</span></div>
+              </div>
+              <div class="ac-body">
+                <div class="ac-msg">
+                  <div class="ac-bot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="11" rx="2.5"/><path d="M12 8V5"/><circle cx="9" cy="13" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r="1" fill="currentColor" stroke="none"/></svg></div>
+                  <div class="ac-bubble">Hello Jimmy Anderson! I&rsquo;m your AI Assistant for Symplify. I can help with scheduling, drug interaction checks, triage assessments, clinical alerts, shift handoffs, and more. How can I assist you today?<span class="ac-time">07:05 PM</span></div>
+                </div>
+                <div class="ac-tabs">
+                  <div class="ac-tab active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-3 3a3 3 0 004 4l1-1"/><path d="M15 18l3-3a3 3 0 00-4-4l-1 1"/></svg></div>
+                  <div class="ac-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5 5.5.5-4 3.7 1.2 5.3L12 20l-5.2 2.8L8 16.2 4 12.5 9.5 12 12 3z"/></svg></div>
+                  <div class="ac-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></svg></div>
+                  <div class="ac-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 000 18M12 3a14 14 0 010 18"/></svg></div>
+                </div>
+                <div class="ac-chips">
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-3 3a3 3 0 004 4l1-1"/><path d="M15 18l3-3a3 3 0 00-4-4l-1 1"/></svg>Drug Interaction Check</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a2 2 0 012-2h14a2 2 0 012 2v6M3 14h18M6 10V7a1 1 0 011-1h4v4"/></svg>Bed Availability</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 9h16M8 3v4M16 3v4"/></svg>Schedule Appointment</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0112 0M16 11l2 2 4-4"/></svg>Staff Schedule</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg>Compliance Status</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Pending Approvals</div>
+                </div>
+                <div class="ac-input">
+                  <span class="ph">Type your message...</span>
+                  <div class="ac-send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></div>
+                </div>
+                <div class="ac-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6l8-3z"/></svg>HIPAA Compliant</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SLIDE 22 — SYNTHESIS: THE COMPOUND
+       Three-column. Third appearance of the pattern.
+       Script pairing: 24:30–25:30
+       ===================================================================== -->
+  <section class="slide" data-slide="22">
+    <div class="slide-inner">
+      <h2 class="display-m" style="text-align: center; max-width: 100%;">One primitive. Three regulated verticals.</h2>
+      <div class="body-m" style="text-align: center; margin-top: 8px; color: var(--ink-muted);">
+        Trust surfaces translate model output into human decisions.
+      </div>
+      <div class="spacer"></div>
+      <div class="row-3" style="margin-bottom: 6%; min-height: 640px; align-items: center; gap: 56px;">
+        <div class="stack-tight" style="display: flex; flex-direction: column; align-items: center;">
+          <div class="label-overline" style="text-align: center;">Computis &nbsp;·&nbsp; Finance</div>
+          <div style="width: 100%; margin-top: 12px; display: flex; justify-content: center;">
+            <div class="trust-card" style="font-size: 13px; padding: 1.25em 1.4em; gap: 1em;">
+              <div class="tc-head">
+                <div class="tc-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9l-4.6 1.9L12 15l-1.9-4.1L5.5 9l4.6-1.4L12 3z"/><path d="M19 14l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2z"/></svg>
+                </div>
+                <div class="tc-titles">
+                  <div class="tc-title">AI Classification</div>
+                  <div class="tc-sub">Confidence distribution</div>
+                </div>
+                <div class="tc-pill">117</div>
+              </div>
+              <div class="tc-rows">
+                <div class="tc-row">
+                  <div class="tc-status high"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></div>
+                  <div class="tc-label"><span class="name">High</span><span class="count">61 txns</span></div>
+                  <div class="tc-track"><div class="tc-fill" style="width: 55%;"></div></div>
+                  <div class="tc-pct high">55%</div>
+                </div>
+                <div class="tc-row">
+                  <div class="tc-status med"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/></svg></div>
+                  <div class="tc-label"><span class="name">Medium</span><span class="count">42 txns</span></div>
+                  <div class="tc-track"><div class="tc-fill" style="width: 34%;"></div></div>
+                  <div class="tc-pct med">34%</div>
+                </div>
+                <div class="tc-row">
+                  <div class="tc-status low"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg></div>
+                  <div class="tc-label"><span class="name">Low</span><span class="count">14 txns</span></div>
+                  <div class="tc-track"><div class="tc-fill" style="width: 11%;"></div></div>
+                  <div class="tc-pct low">11%</div>
+                </div>
+              </div>
+              <div class="tc-foot">
+                <span class="lbl">Total Classified</span>
+                <span class="val">117 transactions</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="stack-tight" style="display: flex; flex-direction: column; align-items: center;">
+          <div class="label-overline" style="text-align: center;">Symplify &nbsp;·&nbsp; Healthcare</div>
+          <div style="margin-top: 12px; display: flex; justify-content: center; width: 100%;">
+            <div class="assistant-card" style="font-size: 11px; max-width: 300px;">
+              <div class="ac-head">
+                <div class="ac-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="11" rx="2.5"/><path d="M12 8V5M12 5a1.4 1.4 0 100-2.8A1.4 1.4 0 0012 5z"/><circle cx="9" cy="13" r="1.1" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r="1.1" fill="currentColor" stroke="none"/></svg></div>
+                <div class="ac-id"><span class="ac-name">AI Assistant</span><span class="ac-status">Online</span></div>
+                <div class="ac-win"><span>&minus;</span><span>&times;</span></div>
+              </div>
+              <div class="ac-body">
+                <div class="ac-msg">
+                  <div class="ac-bot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="11" rx="2.5"/><path d="M12 8V5"/><circle cx="9" cy="13" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r="1" fill="currentColor" stroke="none"/></svg></div>
+                  <div class="ac-bubble">Hello Jimmy Anderson! I&rsquo;m your AI Assistant for Symplify. I can help with scheduling, drug interaction checks, triage assessments, clinical alerts, shift handoffs, and more. How can I assist you today?<span class="ac-time">07:05 PM</span></div>
+                </div>
+                <div class="ac-tabs">
+                  <div class="ac-tab active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-3 3a3 3 0 004 4l1-1"/><path d="M15 18l3-3a3 3 0 00-4-4l-1 1"/></svg></div>
+                  <div class="ac-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5 5.5.5-4 3.7 1.2 5.3L12 20l-5.2 2.8L8 16.2 4 12.5 9.5 12 12 3z"/></svg></div>
+                  <div class="ac-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></svg></div>
+                  <div class="ac-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 000 18M12 3a14 14 0 010 18"/></svg></div>
+                </div>
+                <div class="ac-chips">
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-3 3a3 3 0 004 4l1-1"/><path d="M15 18l3-3a3 3 0 00-4-4l-1 1"/></svg>Drug Interaction Check</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a2 2 0 012-2h14a2 2 0 012 2v6M3 14h18M6 10V7a1 1 0 011-1h4v4"/></svg>Bed Availability</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 9h16M8 3v4M16 3v4"/></svg>Schedule Appointment</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0112 0M16 11l2 2 4-4"/></svg>Staff Schedule</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg>Compliance Status</div>
+                  <div class="ac-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Pending Approvals</div>
+                </div>
+                <div class="ac-input">
+                  <span class="ph">Type your message...</span>
+                  <div class="ac-send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></div>
+                </div>
+                <div class="ac-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6l8-3z"/></svg>HIPAA Compliant</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="stack-tight" style="display: flex; flex-direction: column; align-items: center;">
+          <div class="label-overline" style="text-align: center;">Wayline &nbsp;·&nbsp; Property mgmt</div>
+          <!-- Cropped sketch — no annotations -->
+          <div style="width: 100%; margin-top: 12px;">
+            <div class="sketch" style="grid-template-columns: 1fr; gap: 12px; padding: 18px;">
+              <div class="pane" style="padding: 13px; gap: 8px;">
+                <div class="pane-label">Transcript</div>
+                <div class="transcript-line">
+                  <div class="speaker">Tenant</div>
+                  <div class="utterance" style="font-size: 12px;">"My sink is leaking..."</div>
+                  <div class="conf-inline hi" style="font-size: 10px;">HI</div>
+                </div>
+                <div class="transcript-line">
+                  <div class="speaker">Agent</div>
+                  <div class="utterance" style="font-size: 12px;">"I can send a tech Friday..."</div>
+                  <div class="conf-inline md" style="font-size: 10px;">MD</div>
+                </div>
+              </div>
+              <div class="commitment" style="padding: 11px 13px;">
+                <div class="c-text" style="font-size: 13px;">Callback by Fri 5pm</div>
+                <div class="c-actions" style="margin-top: 7px;">
+                  <div class="c-btn" style="font-size: 11px; padding: 4px 8px;">Confirm</div>
+                  <div class="c-btn" style="font-size: 11px; padding: 4px 8px;">Override</div>
+                </div>
+              </div>
+              <div class="escalate" style="padding: 10px; font-size: 12px;">Hand to human</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SLIDE 23 — SYNTHESIS: THE SEAMFUL REFRAME
+       Kill-switch slide. The contrarian thesis on Wayline's own JD language.
+       Script pairing: 25:30–26:30
+       ===================================================================== -->
+  <section class="slide" data-slide="23">
+    <div class="slide-inner">
+      <h2 class="display-m" style="color: var(--accent);">Legibly seamful.</h2>
+      <div class="spacer"></div>
+      <div class="row" style="margin-bottom: 4%; gap: 6%; align-items: stretch; min-height: 540px;">
+        <!-- Left: the reframe -->
+        <div class="stack" style="display: flex; flex-direction: column;">
+          <div class="jd-quote">
+            "design and ship AI-native interfaces where humans and agents interact <span class="strike">seamlessly</span><span class="replacement">legibly seamful</span>"
+          </div>
+          <div class="stack-tight" style="margin-top: 32px;">
+            <div class="display-s" style="font-size: 22px;">Confidence on every output.</div>
+            <div class="display-s" style="font-size: 22px;">Audit at the point of decision.</div>
+            <div class="display-s" style="font-size: 22px;">Override as a first-class affordance.</div>
+          </div>
+          <div class="body-s italic" style="margin-top: auto;">
+            Seamless says hide the AI. Legibly seamful says show the AI where it matters — because the seams are where the professional's license touches the model.
+          </div>
+        </div>
+        <!-- Right: the Wayline sketch (full annotated) -->
+        <div style="display: flex; flex-direction: column;">
+          <div class="label-overline" style="margin-bottom: 12px;">Wayline — property manager supervises a live agent call</div>
+          <div class="sketch" style="flex: 1;">
+            <div class="pane">
+              <div class="pane-label">Live transcript</div>
+              <div class="transcript-line">
+                <div class="speaker">Tenant</div>
+                <div class="utterance">"Hi, my sink is leaking in apartment 3B."</div>
+                <div class="conf-inline hi">HI</div>
+              </div>
+              <div class="transcript-line">
+                <div class="speaker">Agent</div>
+                <div class="utterance">"I'm sorry to hear that. I'll send a technician Friday afternoon."</div>
+                <div class="conf-inline md">MD</div>
+              </div>
+              <div class="transcript-line">
+                <div class="speaker">Tenant</div>
+                <div class="utterance">"Also my lease renewal — and rent's due tomorrow."</div>
+                <div class="conf-inline lo">LO</div>
+              </div>
+              <div class="transcript-line">
+                <div class="speaker">Agent</div>
+                <div class="utterance">"Let me note both. I'll send forms via SMS."</div>
+                <div class="conf-inline md">MD</div>
+              </div>
+            </div>
+            <div class="right-col">
+              <div>
+                <div class="pane-label" style="margin-bottom: 8px;">Commitments</div>
+                <div class="commitment">
+                  <div class="c-text">Callback by Friday 5pm</div>
+                  <div class="c-actions">
+                    <div class="c-btn">Confirm</div>
+                    <div class="c-btn">Override</div>
+                  </div>
+                </div>
+                <div class="commitment" style="margin-top: 8px;">
+                  <div class="c-text">Send maintenance form via SMS</div>
+                  <div class="c-actions">
+                    <div class="c-btn">Confirm</div>
+                    <div class="c-btn">Override</div>
+                  </div>
+                </div>
+              </div>
+              <div class="audit-line">
+                why this classification? &nbsp;→
+              </div>
+              <div class="escalate">Hand to human now</div>
+            </div>
+          </div>
+          <div class="sketch-annotations">
+            <div class="ann">transcript</div>
+            <div class="ann">confidence per output</div>
+            <div class="ann">commitments as objects</div>
+            <div class="ann">audit at the point of decision</div>
+            <div class="ann">override as first-class</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SLIDE 24 — 30/60/90
+       Three-column pattern. Operational specifics.
+       Script pairing: 26:30–27:30
+       ===================================================================== -->
+  <section class="slide slide--top-anchor" data-slide="24">
+    <div class="slide-inner">
+      <h2 class="display-m">First 90 days.</h2>
+      <div class="spacer"></div>
+      <div class="row-3" style="margin-bottom: 8%; align-items: flex-start;">
+        <div class="stack-tight">
+          <div class="display-s">30 days.</div>
+          <div class="body-m" style="margin-top: 16px;">
+            Ship a baseline supervision surface for one intent class — lease inquiries — behind a feature flag, in front of one customer. <strong style="color: var(--ink);">Measurement infrastructure ships alongside.</strong>
+          </div>
+        </div>
+        <div class="stack-tight">
+          <div class="display-s">60 days.</div>
+          <div class="body-m" style="margin-top: 16px;">
+            Extend the primitive to maintenance and payment disputes. Validate confidence calibration across intent classes.
+          </div>
+        </div>
+        <div class="stack-tight">
+          <div class="display-s">90 days.</div>
+          <div class="body-m" style="margin-top: 16px;">
+            Versioned component library. First round of property-manager-co-authored iteration — half-days sitting with two PMs on real calls.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SLIDE 25 — THE SPOKEN CLOSE (ANCHOR)
+       Three lines, centered, display weight. No heading. No decoration.
+       Script pairing: 27:30–28:00
+       ===================================================================== -->
+  <section class="slide" data-slide="25">
+    <div class="slide-inner center-xy">
+      <div class="stack-spoken" style="max-width: 84%;">
+        <div class="display-l" style="font-size: 52px;">I design the surface where a professional supervises an AI.</div>
+        <div class="display-l" style="font-size: 52px;">I've done it twice — in finance and in healthcare.</div>
+        <div class="display-l" style="font-size: 52px;">Wayline is property management.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SLIDE 26 — THE ASK (ANCHOR)
+       Left-aligned, operational, three lines.
+       Script pairing: 28:00–29:00
+       ===================================================================== -->
+  <section class="slide" data-slide="26">
+    <div class="slide-inner">
+      <div style="height: 210px;"></div>
+      <div class="stack" style="max-width: 86%;">
+        <div class="display-l">The ask: a two-day work trial.</div>
+        <div class="display-s" style="font-weight: 400; color: var(--ink-soft);">Bring me a real Wayline problem.</div>
+        <div class="display-s" style="font-weight: 400; color: var(--ink-soft);">Let me show you the rhythm.</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- =====================================================================
+     NAVIGATION CHROME
+     ===================================================================== -->
+<div class="nav-chrome" id="navChrome">
+  <button id="prevBtn" aria-label="Previous slide">‹</button>
+  <span class="counter"><span id="curSlide">1</span> <span class="hint">/</span> <span id="totSlides">27</span></span>
+  <button id="nextBtn" aria-label="Next slide">›</button>
+  <span class="hint">← → space &nbsp;·&nbsp; F full &nbsp;·&nbsp; H hide</span>
+</div>
+
+<script>
+  // ========================================================================
+  // DECK NAVIGATION — keyboard-first, screen-share-ready
+  // ========================================================================
+  (function () {
+    const slides   = Array.from(document.querySelectorAll('.slide'));
+    const total    = slides.length;
+    const curEl    = document.getElementById('curSlide');
+    const totEl    = document.getElementById('totSlides');
+    const chrome   = document.getElementById('navChrome');
+    const timeline = document.getElementById('timelineFill');
+    const stage    = document.getElementById('stage');
+    let current    = 0;
+    let chromeHideTimer = null;
+
+    totEl.textContent = total;
+
+    // Presenter mode — invoked via ?presenter=1
+    if (new URLSearchParams(location.search).get('presenter') === '1') {
+      document.body.classList.add('presenter');
+    }
+
+    function goto(n) {
+      n = Math.max(0, Math.min(total - 1, n));
+      slides[current].classList.remove('active');
+      // Pause videos on the outgoing slide
+      slides[current].querySelectorAll('.asset-frame video').forEach(v => {
+        try { v.pause(); } catch (e) {}
+      });
+      current = n;
+      slides[current].classList.add('active');
+      curEl.textContent = current + 1;
+      if (timeline) {
+        timeline.style.width = ((current + 1) / total * 100) + '%';
+      }
+      // Resolve placeholders that now have a loaded image
+      slides[current].querySelectorAll('.asset-frame img').forEach(img => {
+        if (img.complete && img.naturalWidth > 0) {
+          const ph = img.nextElementSibling;
+          if (ph && ph.classList.contains('placeholder')) {
+            ph.classList.add('is-loaded');
+          }
+        }
+      });
+      // Resume playback on videos on the active slide; hide placeholders if loaded
+      slides[current].querySelectorAll('.asset-frame video').forEach(v => {
+        if (v.readyState >= 2) {
+          const ph = v.nextElementSibling;
+          if (ph && ph.classList.contains('placeholder')) {
+            ph.classList.add('is-loaded');
+          }
+        }
+        try {
+          v.currentTime = 0;
+          const p = v.play();
+          if (p && typeof p.catch === 'function') { p.catch(() => {}); }
+        } catch (e) {}
+      });
+    }
+
+    function next() { goto(current + 1); }
+    function prev() { goto(current - 1); }
+
+    document.addEventListener('keydown', function (e) {
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+        case ' ':
+        case 'PageDown':
+          e.preventDefault();
+          next();
+          break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+        case 'PageUp':
+          e.preventDefault();
+          prev();
+          break;
+        case 'Home':
+          e.preventDefault();
+          goto(0);
+          break;
+        case 'End':
+          e.preventDefault();
+          goto(total - 1);
+          break;
+        case 'f':
+        case 'F':
+          if (document.fullscreenElement) {
+            document.exitFullscreen();
+          } else {
+            document.documentElement.requestFullscreen();
+          }
+          break;
+        case 'h':
+        case 'H':
+          chrome.classList.toggle('hidden');
+          break;
+        case 'p':
+        case 'P':
+          document.body.classList.toggle('presenter');
+          break;
+      }
+    });
+
+    document.getElementById('nextBtn').addEventListener('click', next);
+    document.getElementById('prevBtn').addEventListener('click', prev);
+
+    // Auto-hide chrome after 3 seconds of mouse stillness
+    function showChrome() {
+      chrome.classList.remove('hidden');
+      clearTimeout(chromeHideTimer);
+      chromeHideTimer = setTimeout(() => chrome.classList.add('hidden'), 3000);
+    }
+    document.addEventListener('mousemove', showChrome);
+    showChrome();
+
+    // ========================================================================
+    // SLIDE SCALING — keep 1920x1080 always-fits-the-viewport
+    // ========================================================================
+    function scaleSlides() {
+      const margin = 40;
+      const aw = window.innerWidth - margin;
+      const ah = window.innerHeight - margin;
+      const sx = aw / 1920;
+      const sy = ah / 1080;
+      const s = Math.min(sx, sy);
+      slides.forEach(sl => { sl.style.transform = 'scale(' + s + ')'; });
+    }
+    window.addEventListener('resize', scaleSlides);
+    scaleSlides();
+
+    // Initialize
+    goto(0);
+  })();
+</script>
+</body>
+</html>
