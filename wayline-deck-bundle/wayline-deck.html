@@ -6,7 +6,7 @@
 <title>The trust surface between a professional and an AI — Sean Smith for Wayline</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
   /* =========================================================================
      DECK-WIDE VISUAL SYSTEM
@@ -35,7 +35,11 @@
     --band-low-fg: #A33A28;
 
     /* Type tokens */
-    --serif: "Fraunces", "Iowan Old Style", Georgia, serif;
+    /* --serif retains its name for compatibility with ~50 existing var(--serif)
+       references, but now points at Manrope (the new display face). --sans stays
+       Inter for subheads + body — Option 1 pairing. To revert: restore Fraunces
+       below and the original display letter-spacing values. */
+    --serif: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     --sans:  "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     --mono:  "JetBrains Mono", "SF Mono", Menlo, monospace;
 
@@ -119,26 +123,26 @@
      ========================================================================= */
   .display-xl {
     font-family: var(--serif);
-    font-weight: 600;
+    font-weight: 700;
     font-size: 84px;
     line-height: 1.04;
-    letter-spacing: -0.018em;
+    letter-spacing: -0.005em;
     color: var(--ink);
   }
   .display-l {
     font-family: var(--serif);
-    font-weight: 600;
+    font-weight: 700;
     font-size: 64px;
     line-height: 1.06;
-    letter-spacing: -0.014em;
+    letter-spacing: -0.004em;
     color: var(--ink);
   }
   .display-m {
     font-family: var(--serif);
-    font-weight: 600;
+    font-weight: 700;
     font-size: 44px;
     line-height: 1.1;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.003em;
     color: var(--ink);
   }
   .display-s {
@@ -146,7 +150,7 @@
     font-weight: 600;
     font-size: 32px;
     line-height: 1.16;
-    letter-spacing: -0.006em;
+    letter-spacing: -0.002em;
     color: var(--ink);
   }
   .body-l {
@@ -190,10 +194,10 @@
   /* Number display — only used on slide 10 */
   .number-display {
     font-family: var(--serif);
-    font-weight: 600;
+    font-weight: 800;
     font-size: 132px;
     line-height: 0.94;
-    letter-spacing: -0.022em;
+    letter-spacing: -0.01em;
     color: var(--ink);
   }
   .number-caption {
@@ -383,6 +387,279 @@
     font-family: var(--mono);
     font-size: 13px;
     opacity: 0.7;
+  }
+
+  /* =========================================================================
+     ANNOTATION CALLOUTS — slides 6 and 17
+     The decision a visual encodes, named at projection scale. Overlay-positioned
+     so they never reflow the asset they annotate. Accent green only — --strike
+     red stays reserved for the slide-23 seamless/seamful reframe (one use, deck-wide).
+
+     Anatomy: a .callout is an absolutely-positioned card; a .callout-line is a
+     thin connector drawn from the card toward the thing it points at. Parent must
+     be position:relative (the .asset-frame and the slide-17 grid both are, or are
+     set so below). Disable both by deleting the .callout markup — nothing else
+     depends on it.
+     ========================================================================= */
+  .callout {
+    position: absolute;
+    z-index: 5;
+    max-width: 300px;
+    background: var(--panel);
+    border: 1px solid var(--accent);
+    border-left: 3px solid var(--accent);
+    border-radius: 5px;
+    padding: 12px 16px;
+    box-shadow: 0 2px 4px rgba(22,21,19,0.06), 0 10px 28px rgba(46,93,79,0.10);
+    font-family: var(--sans);
+  }
+  .callout .co-lead {
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 1.18;
+    letter-spacing: -0.006em;
+    color: var(--accent);
+  }
+  .callout .co-sub {
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--ink-soft);
+    margin-top: 5px;
+  }
+  /* Connector — a hairline that visually tethers the card to its target.
+     Direction set per-instance with inline width/height/rotation. */
+  .callout-line {
+    position: absolute;
+    z-index: 4;
+    height: 1.5px;
+    background: var(--accent);
+    transform-origin: left center;
+    opacity: 0.85;
+    pointer-events: none;
+  }
+  .callout-line::after {
+    /* arrowhead */
+    content: "";
+    position: absolute;
+    right: -1px; top: 50%;
+    width: 7px; height: 7px;
+    border-top: 1.5px solid var(--accent);
+    border-right: 1.5px solid var(--accent);
+    transform: translateY(-50%) rotate(45deg);
+  }
+
+  /* =========================================================================
+     APPENDIX / BACKUP CHARTS — slides B1, B2, B3
+     Off the main sequence. Reached on demand during Q&A (press B to cycle,
+     Esc to return). Excluded from the slide counter and arrow navigation by
+     the nav script (filters out .appendix-slide). Pure CSS — no chart library,
+     print-safe like the rest of the deck.
+     ========================================================================= */
+  .appendix-slide { display: none; }
+  .appendix-slide.active { display: block; }
+
+  /* Appendix wrapper marker — small, top-right, so the room knows this is a
+     backup pulled up in response to a question, not part of the linear deck. */
+  .appendix-tag {
+    position: absolute;
+    top: var(--pad-y);
+    right: var(--pad-x);
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+  }
+  .appendix-tag .dot {
+    display: inline-block;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--ink-faint);
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  /* The "what triggers this slide" prompt line under the heading */
+  .trigger-line {
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.45;
+    color: var(--ink-muted);
+    max-width: 78%;
+  }
+  .trigger-line .q {
+    font-style: italic;
+    color: var(--ink-soft);
+  }
+
+  /* ---- Paired-bar chart (B1, B3) ---- */
+  .pair-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 14%;
+    height: 100%;
+    padding: 0 4% 0 2%;
+  }
+  .pair-chart .bar-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    gap: 18px;
+  }
+  .pair-chart .bar-wrap {
+    width: 100%;
+    max-width: 200px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    flex: 1;
+  }
+  .pair-chart .bar {
+    width: 100%;
+    max-width: 170px;
+    border-radius: 6px 6px 0 0;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 4px;
+  }
+  .pair-chart .bar.before { background: #D8D4CC; }
+  .pair-chart .bar.after  { background: var(--accent); }
+  .pair-chart .bar .bar-val {
+    position: absolute;
+    top: -38px;
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 30px;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .pair-chart .bar-label {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+  .pair-chart .bar-label .sub {
+    display: block;
+    font-weight: 400;
+    font-size: 13px;
+    color: var(--ink-muted);
+    margin-top: 2px;
+  }
+  /* Delta bracket between the two bars */
+  .chart-delta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+  }
+  .chart-delta .delta-val {
+    font-family: var(--serif);
+    font-weight: 800;
+    font-size: 44px;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .chart-delta .delta-cap {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-muted);
+    margin-top: 6px;
+    text-align: center;
+    max-width: 120px;
+  }
+
+  /* ---- Dot-distribution plot (B2) — shows spread across the 6-firm cohort ---- */
+  .dist-plot {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    height: 100%;
+    justify-content: center;
+  }
+  .dist-row {
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    align-items: center;
+    gap: 20px;
+  }
+  .dist-row .dist-label {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--ink-soft);
+    text-align: right;
+  }
+  .dist-track {
+    position: relative;
+    height: 44px;
+    border-left: 1.5px solid var(--rule);
+    border-bottom: 1.5px solid var(--rule);
+  }
+  .dist-dot {
+    position: absolute;
+    top: 50%;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    border: 1.5px solid var(--bg);
+  }
+  .dist-dot.before { background: #C9C4BB; }
+  .dist-dot.after  { background: var(--accent); }
+  .dist-median {
+    position: absolute;
+    top: 8px; bottom: 8px;
+    width: 2px;
+    background: var(--ink);
+    transform: translateX(-50%);
+  }
+  .dist-median .med-cap {
+    position: absolute;
+    top: -22px; left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .dist-axis {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-muted);
+    padding-left: 112px;
+    margin-top: 4px;
+  }
+
+  /* Honest-caveat footnote — the integrity move on every backup chart */
+  .chart-caveat {
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink-muted);
+    border-top: 1px solid var(--rule);
+    padding-top: 16px;
+    max-width: 88%;
+  }
+  .chart-caveat strong { color: var(--ink-soft); font-weight: 600; }
+  .data-needed {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: #8A6418;
+    background: var(--band-med-bg);
+    padding: 2px 8px;
+    border-radius: 3px;
   }
 
   /* =========================================================================
@@ -644,7 +921,7 @@
      ========================================================================= */
   .jd-quote {
     font-family: var(--serif);
-    font-weight: 400;
+    font-weight: 500;
     font-style: italic;
     font-size: 30px;
     line-height: 1.36;
@@ -992,8 +1269,23 @@
             What did 0.67 mean in dollars at risk? She invented her own threshold. So did everyone else.
           </div>
         </div>
-        <div class="stack-tight" style="display: flex; flex-direction: column;">
+        <div class="stack-tight" style="display: flex; flex-direction: column; position: relative;">
           <div class="label-overline">After — confidence-banded decisions</div>
+          <!-- ANNOTATION CALLOUTS · slide 6 — see .callout CSS block.
+               Positioned over the upper-right and lower-right of the after-panel.
+               If the real PNG's band rows sit at different heights than the CSS
+               fallback, nudge the `top` values below to align the connector arrow
+               with the High row (top callout) and Low row (bottom callout). -->
+          <div class="callout" style="top: 4%; right: -2%;">
+            <div class="co-lead">55% &rarr; accept in bulk.</div>
+            <div class="co-sub">One action, not 61 judgment calls.</div>
+          </div>
+          <div class="callout-line" style="top: 11%; right: 30%; width: 9%; transform: rotate(8deg);"></div>
+          <div class="callout" style="bottom: 7%; right: -2%;">
+            <div class="co-lead">11% &rarr; escalate.</div>
+            <div class="co-sub">The CPA&rsquo;s license only touches these 14.</div>
+          </div>
+          <div class="callout-line" style="bottom: 15%; right: 30%; width: 9%; transform: rotate(-8deg);"></div>
           <div class="asset-frame" style="aspect-ratio: 3352 / 2004; width: 100%; margin-top: 12px; background: transparent; box-shadow: none; border: none;">
             <img src="./assets/computis-classification-insights.png" alt="Computis classification insights panel" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
             <div class="placeholder">
@@ -1090,7 +1382,7 @@
           <div class="metadata" style="margin-top: 16px;">Dated, public, in the repo — not a tidied-up retro.</div>
         </div>
         <div style="text-align: right; flex-shrink: 0;">
-          <div style="font-family: var(--serif); font-weight: 600; font-size: 104px; line-height: 0.88; letter-spacing: -0.022em; color: var(--accent);">68<span style="font-family: var(--sans); font-weight: 400; font-size: 34px; letter-spacing: 0; color: var(--ink-muted);">/100</span></div>
+          <div style="font-family: var(--serif); font-weight: 800; font-size: 104px; line-height: 0.88; letter-spacing: -0.01em; color: var(--accent);">68<span style="font-family: var(--sans); font-weight: 400; font-size: 34px; letter-spacing: 0; color: var(--ink-muted);">/100</span></div>
           <div class="metadata" style="letter-spacing: 0.12em; text-transform: uppercase; font-size: 13px; margin-top: 6px;">Audit score</div>
         </div>
       </div>
@@ -1429,7 +1721,14 @@
         </div>
       </div>
       <div class="spacer"></div>
-      <div style="display: grid; grid-template-columns: 1fr 2.2fr 1fr; grid-template-rows: 1fr 1fr; gap: 32px; min-height: 800px; margin-bottom: 4%; align-items: stretch;">
+      <div style="position: relative; display: grid; grid-template-columns: 1fr 2.2fr 1fr; grid-template-rows: 1fr 1fr; gap: 32px; min-height: 800px; margin-bottom: 4%; align-items: stretch;">
+        <!-- ANNOTATION CALLOUT · slide 17 — names the invariant, not any single
+             component. Centered over the hero's lower third so it reads as the
+             caption that unifies the five surfaces. See .callout CSS block. -->
+        <div class="callout" style="left: 50%; bottom: 9%; transform: translateX(-50%); max-width: 460px; text-align: center; border-left: 1px solid var(--accent); border-top: 3px solid var(--accent);">
+          <div class="co-lead">Same confidence primitive. Four surfaces.</div>
+          <div class="co-sub">Triage, drug-interaction, message-urgency, acuity &mdash; one component, role-aware.</div>
+        </div>
         <!-- Peripheral 1 -->
         <div class="asset-frame" style="grid-column: 1; grid-row: 1; opacity: 0.9;">
           <img src="./assets/symplify-triage-badge.png" alt="Triage Priority Badge" onload="this.nextElementSibling.classList.add('is-loaded')" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('is-loaded')" />
@@ -1903,6 +2202,183 @@
     </div>
   </section>
 
+  <!-- =====================================================================
+       APPENDIX — BACKUP CHARTS (B1–B3)
+       Off the linear sequence. Reached on demand: press B to cycle B1→B2→B3,
+       Esc returns to the main deck. Not counted, not in arrow nav.
+       Build rule: verified metrics only (40/45/32/85, n=6 cohort). Every
+       unverified value is a visible [DATA NEEDED] slot — never fabricated.
+       ===================================================================== -->
+
+  <!-- B1 — for slide 4: the 32% demo-to-customer conversion gap -->
+  <section class="slide appendix-slide" data-appendix="1">
+    <div class="slide-inner">
+      <div class="appendix-tag"><span class="dot"></span>Backup · for slide 4</div>
+      <div class="title-block">
+        <h2 class="display-m">Demo-to-customer conversion.</h2>
+        <div class="trigger-line">Pulled up if asked: <span class="q">&ldquo;Where does the 32% come from &mdash; and how do you know the redesign caused it?&rdquo;</span></div>
+      </div>
+      <div class="spacer"></div>
+      <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 7%; align-items: stretch; min-height: 520px; margin-bottom: 3%;">
+        <div style="display: flex; flex-direction: column;">
+          <div class="label-overline">Conversion rate &mdash; pre vs. post redesign</div>
+          <div style="flex: 1; margin-top: 28px;">
+            <div class="pair-chart">
+              <div class="bar-group">
+                <div class="bar-wrap"><div class="bar before" style="height: 56%;"><span class="bar-val">base</span></div></div>
+                <div class="bar-label">Pre-redesign<span class="sub">baseline rate</span></div>
+              </div>
+              <div class="chart-delta">
+                <div class="delta-val">+32%</div>
+                <div class="delta-cap">relative increase</div>
+              </div>
+              <div class="bar-group">
+                <div class="bar-wrap"><div class="bar after" style="height: 100%;"><span class="bar-val" style="color: var(--accent);">+32%</span></div></div>
+                <div class="bar-label">Post-redesign<span class="sub">quarter-over-quarter</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; justify-content: center; gap: 24px;">
+          <div class="stack-tight">
+            <div class="label-overline">Source</div>
+            <div class="body-m">Sales pipeline data, quarter-over-quarter post-redesign. Rate only &mdash; absolute account counts withheld to avoid the &ldquo;out of how many&rdquo; cohort-size detour.</div>
+          </div>
+          <div class="chart-caveat">
+            <strong>Confound, named before you are:</strong> the sales team revised its onboarding script in the same window. This number is <strong>directional, not causally isolated.</strong> The redesign is one of two plausible drivers.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- B2 — for slide 11: 40% accounting-time / 45% onboarding, distribution across n=6 -->
+  <section class="slide appendix-slide" data-appendix="2">
+    <div class="slide-inner">
+      <div class="appendix-tag"><span class="dot"></span>Backup · for slide 11</div>
+      <div class="title-block">
+        <h2 class="display-m">The spread behind the medians.</h2>
+        <div class="trigger-line">Pulled up if asked: <span class="q">&ldquo;40% median &mdash; what&rsquo;s the variance? Six firms is a small cohort.&rdquo;</span></div>
+      </div>
+      <div class="spacer"></div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8%; align-items: stretch; min-height: 480px; margin-bottom: 3%;">
+        <div style="display: flex; flex-direction: column;">
+          <div class="label-overline">40% &mdash; accounting processing time</div>
+          <div class="body-s" style="margin-top: 6px; color: var(--ink-muted);">Wallet-ingest &rarr; filed-classification, per firm (n=6)</div>
+          <div style="flex: 1; margin-top: 24px;">
+            <div class="dist-plot">
+              <div class="dist-row">
+                <div class="dist-label">Before</div>
+                <div class="dist-track">
+                  <!-- 6 firms; positions illustrative of spread, anchored to a 100% median.
+                       [DATA NEEDED] replace left% with real per-firm values. -->
+                  <span class="dist-dot before" style="left: 72%;"></span>
+                  <span class="dist-dot before" style="left: 84%;"></span>
+                  <span class="dist-dot before" style="left: 88%;"></span>
+                  <span class="dist-dot before" style="left: 91%;"></span>
+                  <span class="dist-dot before" style="left: 95%;"></span>
+                  <span class="dist-dot before" style="left: 99%;"></span>
+                  <span class="dist-median" style="left: 89%;"><span class="med-cap">median</span></span>
+                </div>
+              </div>
+              <div class="dist-row">
+                <div class="dist-label">After</div>
+                <div class="dist-track">
+                  <span class="dist-dot after" style="left: 44%;"></span>
+                  <span class="dist-dot after" style="left: 50%;"></span>
+                  <span class="dist-dot after" style="left: 53%;"></span>
+                  <span class="dist-dot after" style="left: 57%;"></span>
+                  <span class="dist-dot after" style="left: 62%;"></span>
+                  <span class="dist-dot after" style="left: 70%;"></span>
+                  <span class="dist-median" style="left: 54%;"><span class="med-cap">&minus;40%</span></span>
+                </div>
+              </div>
+              <div class="dist-axis"><span>faster</span><span>0</span></div>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column;">
+          <div class="label-overline">45% &mdash; CPA onboarding time</div>
+          <div class="body-s" style="margin-top: 6px; color: var(--ink-muted);">Credential-issue &rarr; first-completed task, per firm (n=6)</div>
+          <div style="flex: 1; margin-top: 24px;">
+            <div class="dist-plot">
+              <div class="dist-row">
+                <div class="dist-label">Before</div>
+                <div class="dist-track">
+                  <span class="dist-dot before" style="left: 70%;"></span>
+                  <span class="dist-dot before" style="left: 82%;"></span>
+                  <span class="dist-dot before" style="left: 87%;"></span>
+                  <span class="dist-dot before" style="left: 90%;"></span>
+                  <span class="dist-dot before" style="left: 94%;"></span>
+                  <span class="dist-dot before" style="left: 98%;"></span>
+                  <span class="dist-median" style="left: 88%;"><span class="med-cap">median</span></span>
+                </div>
+              </div>
+              <div class="dist-row">
+                <div class="dist-label">After</div>
+                <div class="dist-track">
+                  <span class="dist-dot after" style="left: 38%;"></span>
+                  <span class="dist-dot after" style="left: 44%;"></span>
+                  <span class="dist-dot after" style="left: 48%;"></span>
+                  <span class="dist-dot after" style="left: 52%;"></span>
+                  <span class="dist-dot after" style="left: 58%;"></span>
+                  <span class="dist-dot after" style="left: 66%;"></span>
+                  <span class="dist-median" style="left: 48%;"><span class="med-cap">&minus;45%</span></span>
+                </div>
+              </div>
+              <div class="dist-axis"><span>faster</span><span>0</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chart-caveat" style="max-width: 100%;">
+        <span class="data-needed">[DATA NEEDED]</span> &nbsp;Dot positions are illustrative of spread, not real per-firm values, and the axis unit (days vs. hours) is unset. Replace with actual cohort data before presenting. <strong>n=6, early post-launch signal &mdash; stated as such.</strong>
+      </div>
+    </div>
+  </section>
+
+  <!-- B3 — for slide 12: the 85% engineering-dependency reduction (the attackable one) -->
+  <section class="slide appendix-slide" data-appendix="3">
+    <div class="slide-inner">
+      <div class="appendix-tag"><span class="dot"></span>Backup · for slide 12</div>
+      <div class="title-block">
+        <h2 class="display-m">85% engineering dependency &mdash; defined.</h2>
+        <div class="trigger-line">Pulled up if asked: <span class="q">&ldquo;85% reduction &mdash; measured how? That&rsquo;s the one I&rsquo;d push on.&rdquo;</span> &nbsp;(Your own slide flags it as the most attackable.)</div>
+      </div>
+      <div class="spacer"></div>
+      <div style="display: grid; grid-template-columns: 1fr 1.15fr; gap: 7%; align-items: stretch; min-height: 500px; margin-bottom: 3%;">
+        <div style="display: flex; flex-direction: column;">
+          <div class="label-overline">Design-clarification tickets reopened post-handoff</div>
+          <div style="flex: 1; margin-top: 28px;">
+            <div class="pair-chart">
+              <div class="bar-group">
+                <div class="bar-wrap"><div class="bar before" style="height: 100%;"><span class="bar-val"><span class="data-needed">n=?</span></span></div></div>
+                <div class="bar-label">Before v2 spec<span class="sub">pre-component-library</span></div>
+              </div>
+              <div class="chart-delta">
+                <div class="delta-val">&minus;85%</div>
+                <div class="delta-cap">verified reduction</div>
+              </div>
+              <div class="bar-group">
+                <div class="bar-wrap"><div class="bar after" style="height: 15%;"><span class="bar-val" style="color: var(--accent);"><span class="data-needed">n=?</span></span></div></div>
+                <div class="bar-label">After v2 spec<span class="sub">post-component-library</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; justify-content: center; gap: 22px;">
+          <div class="stack-tight">
+            <div class="label-overline">Exact definition</div>
+            <div class="body-m">A <em>design-clarification ticket reopened post-handoff</em> = any ticket where engineering re-requested design input after the spec was marked delivered. Counted before vs. after the v2 component spec shipped.</div>
+          </div>
+          <div class="chart-caveat">
+            <span class="data-needed">[DATA NEEDED]</span> &nbsp;Raw pre/post counts unset &mdash; the 85% is verified but the numerator/denominator aren&rsquo;t in hand. <strong>If you can&rsquo;t source the counts, present this as the definition slide alone</strong> (a precise definition defends an attackable metric better than a vague bar). Pair with the v2 component-spec artifact: cause beside effect.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </div>
 
 <!-- =====================================================================
@@ -1912,7 +2388,7 @@
   <button id="prevBtn" aria-label="Previous slide">‹</button>
   <span class="counter"><span id="curSlide">1</span> <span class="hint">/</span> <span id="totSlides">27</span></span>
   <button id="nextBtn" aria-label="Next slide">›</button>
-  <span class="hint">← → space &nbsp;·&nbsp; F full &nbsp;·&nbsp; H hide</span>
+  <span class="hint">← → space &nbsp;·&nbsp; F full &nbsp;·&nbsp; H hide &nbsp;·&nbsp; B backup</span>
 </div>
 
 <script>
@@ -1920,7 +2396,11 @@
   // DECK NAVIGATION — keyboard-first, screen-share-ready
   // ========================================================================
   (function () {
-    const slides   = Array.from(document.querySelectorAll('.slide'));
+    // Main sequence excludes .appendix-slide — those are backup charts reached
+    // on demand (press B to cycle, Esc to return), never in the linear count.
+    const allSlides = Array.from(document.querySelectorAll('.slide'));
+    const slides    = allSlides.filter(s => !s.classList.contains('appendix-slide'));
+    const appendix  = allSlides.filter(s =>  s.classList.contains('appendix-slide'));
     const total    = slides.length;
     const curEl    = document.getElementById('curSlide');
     const totEl    = document.getElementById('totSlides');
@@ -1929,6 +2409,9 @@
     const stage    = document.getElementById('stage');
     let current    = 0;
     let chromeHideTimer = null;
+
+    // Appendix state: -1 = not in appendix; 0..n = which backup slide is showing.
+    let inAppendix = -1;
 
     totEl.textContent = total;
 
@@ -1978,6 +2461,30 @@
     function next() { goto(current + 1); }
     function prev() { goto(current - 1); }
 
+    // ---- Appendix (backup chart) navigation ----
+    function showAppendix(i) {
+      if (!appendix.length) return;
+      i = (i + appendix.length) % appendix.length;   // wrap
+      // Leaving the main slide on screen behind would double-render; hide it.
+      slides[current].classList.remove('active');
+      appendix.forEach(s => s.classList.remove('active'));
+      appendix[i].classList.add('active');
+      inAppendix = i;
+      // Hide the linear counter while in backup material — it's not slide N of 25.
+      curEl.textContent = 'B' + (i + 1);
+    }
+    function exitAppendix() {
+      if (inAppendix < 0) return;
+      appendix[inAppendix].classList.remove('active');
+      inAppendix = -1;
+      slides[current].classList.add('active');
+      curEl.textContent = current + 1;
+    }
+    function cycleAppendix() {
+      if (inAppendix < 0) showAppendix(0);
+      else showAppendix(inAppendix + 1);
+    }
+
     document.addEventListener('keydown', function (e) {
       switch (e.key) {
         case 'ArrowRight':
@@ -1985,20 +2492,30 @@
         case ' ':
         case 'PageDown':
           e.preventDefault();
-          next();
+          if (inAppendix >= 0) { exitAppendix(); } else { next(); }
           break;
         case 'ArrowLeft':
         case 'ArrowUp':
         case 'PageUp':
           e.preventDefault();
-          prev();
+          if (inAppendix >= 0) { exitAppendix(); } else { prev(); }
+          break;
+        case 'b':
+        case 'B':
+          e.preventDefault();
+          cycleAppendix();
+          break;
+        case 'Escape':
+          if (inAppendix >= 0) { e.preventDefault(); exitAppendix(); }
           break;
         case 'Home':
           e.preventDefault();
+          exitAppendix();
           goto(0);
           break;
         case 'End':
           e.preventDefault();
+          exitAppendix();
           goto(total - 1);
           break;
         case 'f':
@@ -2042,7 +2559,7 @@
       const sx = aw / 1920;
       const sy = ah / 1080;
       const s = Math.min(sx, sy);
-      slides.forEach(sl => { sl.style.transform = 'scale(' + s + ')'; });
+      allSlides.forEach(sl => { sl.style.transform = 'scale(' + s + ')'; });
     }
     window.addEventListener('resize', scaleSlides);
     scaleSlides();
